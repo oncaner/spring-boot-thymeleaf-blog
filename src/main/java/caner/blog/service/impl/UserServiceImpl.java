@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO registerUser(RegistrationRequest request) {
+    public User registerUser(RegistrationRequest request) {
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -47,15 +47,7 @@ public class UserServiceImpl implements UserService {
                 .role(Role.USER)
                 .build();
 
-        User savedUser = userRepository.save(user);
-
-        return UserDTO.builder()
-                .id(savedUser.getId())
-                .firstName(savedUser.getFirstName())
-                .lastName(savedUser.getLastName())
-                .nickname(savedUser.getNickname())
-                .email(savedUser.getEmail())
-                .build();
+        return userRepository.save(user);
     }
 
     @Override
