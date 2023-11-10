@@ -24,21 +24,21 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         Optional<VerificationToken> optionalToken = verificationTokenRepository.findByToken(token);
 
         if (optionalToken.isEmpty()) {
-            return "Invalid verification token";
+            return "INVALID";
         }
 
         User user = optionalToken.get().getUser();
 
         Calendar calendar = Calendar.getInstance();
         if ((optionalToken.get().getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
-            return "expired";
+            return "EXPIRED";
         }
 
         user.setEnabled(true);
 
         userRepository.save(user);
 
-        return null;
+        return "VALID";
     }
 
     @Override
