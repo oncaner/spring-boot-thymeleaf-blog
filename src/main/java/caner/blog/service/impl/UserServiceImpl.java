@@ -2,6 +2,7 @@ package caner.blog.service.impl;
 
 import caner.blog.dto.request.RegistrationRequest;
 import caner.blog.dto.response.UserDTO;
+import caner.blog.enums.Role;
 import caner.blog.model.User;
 import caner.blog.repository.UserRepository;
 import caner.blog.service.UserService;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
                 .nickname(request.getNickname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.USER)
                 .build();
 
         User savedUser = userRepository.save(user);
