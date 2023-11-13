@@ -5,6 +5,7 @@ import caner.blog.dto.response.UserDTO;
 import caner.blog.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -12,6 +13,6 @@ public interface UserService {
 
     User registerUser(RegistrationRequest registrationRequest);
 
-    UserDTO findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
 }

@@ -9,7 +9,5 @@ public class UrlUtil {
         String appUrl = request.getRequestURL().toString();
 
         return appUrl.replace(request.getServletPath(), "");
-
     }
-
 }

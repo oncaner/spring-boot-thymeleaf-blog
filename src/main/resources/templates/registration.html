@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
@@ -7,6 +8,14 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/}">Home</a>
+    <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/users}">Users</a>
+    <a class="navbar-brand" sec:authorize="!isAuthenticated()" th:href="@{/registration/registration-form}">Register</a>
+    <a class="navbar-brand" sec:authorize="!isAuthenticated()" href="#" th:href="@{/login}">Login</a>
+    <a class="navbar-brand" sec:authorize="isAuthenticated()" href="#" th:href="@{/logout}">Logout</a>
+</nav>
 
 <div class="row mt-2">
     <div th:if="${param.success}">
@@ -49,7 +58,7 @@
         <div class="form-group row">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary">Register</button>
-                <span>Registered Already? <a href="/" th:href="@{authenticate/login-form}">Login here.</a></span>
+                <span>Registered Already? <a href="/" th:href="@{/login}">Login here.</a></span>
             </div>
         </div>
     </form>

@@ -3,13 +3,11 @@ package caner.blog.event.listener;
 import caner.blog.event.RegistrationCompleteEvent;
 import caner.blog.model.User;
 import caner.blog.service.VerificationTokenService;
+import caner.blog.utils.EmailUtil;
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -55,18 +53,7 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
                 "Please, follow the link below to complete your registration.</p>" +
                 "<a href=\"" + url + "\">Verify your email to activate your account</a>" +
                 "<p> Thank you <br> Users Registration Portal Service";
-        emailMessage(subject, senderName, mailContent, javaMailSender, user);
-    }
 
-    private static void emailMessage(String subject, String senderName,
-                                     String mailContent, JavaMailSender mailSender, User theUser)
-            throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        var messageHelper = new MimeMessageHelper(message);
-        messageHelper.setFrom("caneron6@gmail.com", senderName);
-        messageHelper.setTo(theUser.getEmail());
-        messageHelper.setSubject(subject);
-        messageHelper.setText(mailContent, true);
-        mailSender.send(message);
+        EmailUtil.emailMessage(subject, senderName, mailContent, javaMailSender, user);
     }
 }

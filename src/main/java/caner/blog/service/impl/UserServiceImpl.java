@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,15 +52,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findByEmail(String email) {
-        User user = userRepository.findByEmail(email);
+    public Optional<User> findByEmail(String email) {
 
-        return UserDTO.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build();
+        return userRepository.findByEmail(email);
     }
 }

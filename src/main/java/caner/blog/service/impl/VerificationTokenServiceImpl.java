@@ -5,6 +5,7 @@ import caner.blog.model.VerificationToken;
 import caner.blog.repository.UserRepository;
 import caner.blog.repository.VerificationTokenRepository;
 import caner.blog.service.VerificationTokenService;
+import caner.blog.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,21 +25,21 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         Optional<VerificationToken> optionalToken = verificationTokenRepository.findByToken(token);
 
         if (optionalToken.isEmpty()) {
-            return "INVALID";
+            return Constant.INVALID;
         }
 
         User user = optionalToken.get().getUser();
 
         Calendar calendar = Calendar.getInstance();
         if ((optionalToken.get().getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
-            return "EXPIRED";
+            return Constant.EXPIRED;
         }
 
         user.setEnabled(true);
 
         userRepository.save(user);
 
-        return "VALID";
+        return Constant.VALID;
     }
 
     @Override
