@@ -52,4 +52,9 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     public Optional<VerificationToken> findByToken(String token) {
         return verificationTokenRepository.findByToken(token);
     }
+
+    @Override
+    public void deleteUserToken(Long id) {
+        verificationTokenRepository.deleteByUserId(id);
+    }
 }

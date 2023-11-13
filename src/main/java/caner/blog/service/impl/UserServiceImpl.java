@@ -6,10 +6,13 @@ import caner.blog.enums.Role;
 import caner.blog.model.User;
 import caner.blog.repository.UserRepository;
 import caner.blog.service.UserService;
+import caner.blog.service.VerificationTokenService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationTokenService verificationTokenService;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -55,5 +59,35 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByEmail(String email) {
 
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateUser(Long id, String firstName, String lastName, String email) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        User user = optionalUser.get();
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            verificationTokenService.deleteUserToken(user.getId());
+            userRepository.deleteById(id);
+        }
     }
 }

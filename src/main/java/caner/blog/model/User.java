@@ -47,7 +47,6 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "email")
-    @NaturalId
     private String email;
 
     @Enumerated(EnumType.STRING)

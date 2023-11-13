@@ -17,6 +17,16 @@
 </nav>
 
 <div class="container col-md-offset-3 col-md-8 mt-lg-5">
+
+    <div class="row mt-2">
+        <div th:if="${param.update_success}" class="alert alert-info">
+            User has been updated successfully.
+        </div>
+        <div th:if="${param.delete_success}" class="alert alert-info">
+            User has been deleted successfully.
+        </div>
+    </div>
+
     <div th:switch="${users}">
         <h2 th:case="null"> There are no users to display.</h2>
         <div th:case="*">
@@ -29,6 +39,7 @@
                         <th scope="col">Last Name</th>
                         <th scope="col">Nickname</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,6 +49,10 @@
                         <td th:text="${user.lastName}"></td>
                         <td th:text="${user.nickname}"></td>
                         <td th:text="${user.email}"></td>
+                        <td>
+                            <a href="#" th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-info">Edit</a>
+                            <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
