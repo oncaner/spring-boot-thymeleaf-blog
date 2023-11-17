@@ -1,4 +1,4 @@
-package caner.blog.utils;
+package caner.blog.common.util;
 
 import caner.blog.model.User;
 import jakarta.mail.MessagingException;
@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.io.UnsupportedEncodingException;
 
-public class EmailUtil {
+public class UserEmailUtil {
 
     public static void emailMessage(String subject, String senderName,
                                     String mailContent, JavaMailSender javaMailSender, User user)
@@ -21,5 +21,6 @@ public class EmailUtil {
         messageHelper.setText(mailContent, true);
         javaMailSender.send(message);
     }
+
 
 }

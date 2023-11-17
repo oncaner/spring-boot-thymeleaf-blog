@@ -11,9 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
-import static caner.blog.utils.Constant.*;
+import static caner.blog.common.Constant.*;
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +65,14 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
         return FAIL;
 
+    }
+
+    @Override
+    public void deletePasswordResetTokensByUserId(Long id) {
+        List<PasswordResetToken> passwordResetTokenList = passwordResetTokenRepository.findAllByUserId(id);
+
+        if(!passwordResetTokenList.isEmpty()){
+            passwordResetTokenRepository.deleteAll(passwordResetTokenList);
+        }
     }
 }

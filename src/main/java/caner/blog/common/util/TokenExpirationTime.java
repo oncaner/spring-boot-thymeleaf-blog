@@ -1,9 +1,9 @@
-package caner.blog.utils;
+package caner.blog.common.util;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import static caner.blog.utils.Constant.EXPIRATION_TIME;
+import static caner.blog.common.Constant.EXPIRATION_TIME;
 
 public class TokenExpirationTime {
 

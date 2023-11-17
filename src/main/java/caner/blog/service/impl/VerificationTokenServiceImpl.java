@@ -5,7 +5,7 @@ import caner.blog.model.VerificationToken;
 import caner.blog.repository.UserRepository;
 import caner.blog.repository.VerificationTokenRepository;
 import caner.blog.service.VerificationTokenService;
-import caner.blog.utils.Constant;
+import caner.blog.common.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

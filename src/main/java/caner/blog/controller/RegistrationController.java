@@ -1,5 +1,6 @@
 package caner.blog.controller;
 
+import caner.blog.common.util.UrlUtil;
 import caner.blog.dto.request.PasswordResetRequest;
 import caner.blog.dto.request.RegistrationRequest;
 import caner.blog.event.RegistrationCompleteEvent;
@@ -9,7 +10,6 @@ import caner.blog.model.VerificationToken;
 import caner.blog.service.PasswordResetTokenService;
 import caner.blog.service.UserService;
 import caner.blog.service.VerificationTokenService;
-import caner.blog.utils.UrlUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +17,17 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
-import static caner.blog.utils.Constant.*;
+import static caner.blog.common.Constant.EXPIRED;
+import static caner.blog.common.Constant.SUCCESS;
+import static caner.blog.common.Constant.VALID;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,15 +48,21 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") @Valid RegistrationRequest registrationRequest,
-                               BindingResult result, HttpServletRequest request) {
+                               Model model, BindingResult result, HttpServletRequest request) {
 
         if (result.hasErrors()) {
             return "registration";
         }
 
-        User user = userService.registerUser(registrationRequest);
+        try {
+            User user = userService.registerUser(registrationRequest);
 
-        applicationEventPublisher.publishEvent(new RegistrationCompleteEvent(user, UrlUtil.getApplicationUrl(request)));
+            applicationEventPublisher.publishEvent(new RegistrationCompleteEvent(user, UrlUtil.getApplicationUrl(request)));
+        } catch (Exception exception) {
+            model.addAttribute("errorMessage", exception.getMessage());
+
+            return "registration";
+        }
 
         return "redirect:/registration/registration-form?success";
     }

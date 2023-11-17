@@ -1,18 +1,20 @@
 package caner.blog.service.impl;
 
+import caner.blog.common.util.UserRegistrationHelper;
 import caner.blog.dto.request.RegistrationRequest;
 import caner.blog.dto.response.UserDTO;
 import caner.blog.enums.Role;
 import caner.blog.model.User;
 import caner.blog.repository.UserRepository;
+import caner.blog.service.PasswordResetTokenService;
 import caner.blog.service.UserService;
 import caner.blog.service.VerificationTokenService;
+import caner.blog.common.util.UserEmailUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenService verificationTokenService;
+    private final PasswordResetTokenService passwordResetTokenService;
+    private final UserRegistrationHelper userRegistrationHelper;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -46,8 +50,8 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .nickname(request.getNickname())
-                .email(request.getEmail())
+                .nickname(userRegistrationHelper.checkNickname(request.getNickname()))
+                .email(userRegistrationHelper.checkEmail(request.getEmail()))
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
@@ -59,6 +63,12 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByEmail(String email) {
 
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findByNickname(String nickname) {
+
+        return userRepository.findByNickname(nickname);
     }
 
     @Override
@@ -85,6 +95,9 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isPresent()) {
+
+            passwordResetTokenService.deletePasswordResetTokensByUserId(id);
+
             User user = optionalUser.get();
             verificationTokenService.deleteUserToken(user.getId());
             userRepository.deleteById(id);

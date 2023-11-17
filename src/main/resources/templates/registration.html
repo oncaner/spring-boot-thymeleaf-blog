@@ -26,16 +26,18 @@
 
     <div class="row mt-2">
         <div th:if="${param.success}">
-            Registration successfully.
+            <p class="alert alert-success">Registration successful. Please check your email to verify your
+                account.</p>
         </div>
-    </div>
-
-    <div th:if="${param.expired}">
-        <p class="alert alert-info">This verification has already expired.</p>
-    </div>
-
-    <div th:if="${param.invalid}">
-        <p class="alert alert-danger">Invalid verification</p>
+        <div th:if="${param.expired}">
+            <p class="alert alert-info">This verification has already expired.</p>
+        </div>
+        <div th:if="${param.invalid}">
+            <p class="alert alert-danger">Invalid verification</p>
+        </div>
+        <div th:if="${errorMessage}">
+            <p class="alert alert-danger" th:text="${errorMessage}"></p>
+        </div>
     </div>
 
     <form th:action="@{/registration/register}" th:object="${user}" method="POST">

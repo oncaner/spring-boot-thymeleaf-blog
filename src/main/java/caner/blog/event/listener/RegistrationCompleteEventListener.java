@@ -3,7 +3,7 @@ package caner.blog.event.listener;
 import caner.blog.event.RegistrationCompleteEvent;
 import caner.blog.model.User;
 import caner.blog.service.VerificationTokenService;
-import caner.blog.utils.EmailUtil;
+import caner.blog.common.util.UserEmailUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
@@ -54,6 +54,6 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
                 "<a href=\"" + url + "\">Verify your email to activate your account</a>" +
                 "<p> Thank you <br> Users Registration Portal Service";
 
-        EmailUtil.emailMessage(subject, senderName, mailContent, javaMailSender, user);
+        UserEmailUtil.emailMessage(subject, senderName, mailContent, javaMailSender, user);
     }
 }

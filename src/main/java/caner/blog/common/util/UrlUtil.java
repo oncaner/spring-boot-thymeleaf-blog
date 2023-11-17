@@ -1,4 +1,4 @@
-package caner.blog.utils;
+package caner.blog.common.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 

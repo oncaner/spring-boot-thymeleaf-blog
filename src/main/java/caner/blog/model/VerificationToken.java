@@ -1,6 +1,6 @@
 package caner.blog.model;
 
-import caner.blog.utils.TokenExpirationTime;
+import caner.blog.common.util.TokenExpirationTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +11,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
 
 import java.util.Date;
 

@@ -3,7 +3,7 @@ package caner.blog.event.listener;
 import caner.blog.event.ResetPasswordEvent;
 import caner.blog.model.User;
 import caner.blog.service.PasswordResetTokenService;
-import caner.blog.utils.EmailUtil;
+import caner.blog.common.util.UserEmailUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
@@ -44,6 +44,6 @@ public class ResetPasswordEventListener implements ApplicationListener<ResetPass
         String subject = "Password Reset Request Verification";
         String senderName = "User Verification Service";
         String mailContent = "<a href=\"" + url + "\">Reset Password</a>";
-        EmailUtil.emailMessage(subject, senderName, mailContent, javaMailSender, user);
+        UserEmailUtil.emailMessage(subject, senderName, mailContent, javaMailSender, user);
     }
 }

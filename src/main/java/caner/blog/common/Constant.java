@@ -1,4 +1,4 @@
-package caner.blog.utils;
+package caner.blog.common;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,11 +1,9 @@
 package caner.blog.model;
 
-import caner.blog.utils.TokenExpirationTime;
+import caner.blog.common.util.TokenExpirationTime;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 
