@@ -1,5 +1,6 @@
 package caner.blog.service.impl;
 
+import caner.blog.dto.request.PasswordResetRequest;
 import caner.blog.model.PasswordResetToken;
 import caner.blog.model.User;
 import caner.blog.repository.PasswordResetTokenRepository;
@@ -52,8 +53,16 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     }
 
     @Override
-    public void resetPassword(User user, String newPassword) {
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+    public String resetPassword(User user, PasswordResetRequest request) {
+
+        if (request.getNewPassword().equals(request.getConfirmPassword())) {
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userRepository.save(user);
+
+            return SUCCESS;
+        }
+
+        return FAIL;
+
     }
 }

@@ -1,5 +1,6 @@
 package caner.blog.service;
 
+import caner.blog.dto.request.PasswordResetRequest;
 import caner.blog.model.User;
 
 import java.util.Optional;
@@ -11,5 +12,5 @@ public interface PasswordResetTokenService {
 
     Optional<User> findUserByPasswordResetToken(String token);
 
-    void resetPassword(User user, String password);
+    String resetPassword(User user, PasswordResetRequest passwordResetRequest);
 }

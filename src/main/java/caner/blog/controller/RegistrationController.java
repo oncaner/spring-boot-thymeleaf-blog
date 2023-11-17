@@ -1,10 +1,9 @@
 package caner.blog.controller;
 
+import caner.blog.dto.request.PasswordResetRequest;
 import caner.blog.dto.request.RegistrationRequest;
 import caner.blog.event.RegistrationCompleteEvent;
 import caner.blog.event.ResetPasswordEvent;
-import caner.blog.event.listener.RegistrationCompleteEventListener;
-import caner.blog.event.listener.ResetPasswordEventListener;
 import caner.blog.model.User;
 import caner.blog.model.VerificationToken;
 import caner.blog.service.PasswordResetTokenService;
@@ -12,14 +11,15 @@ import caner.blog.service.UserService;
 import caner.blog.service.VerificationTokenService;
 import caner.blog.utils.UrlUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static caner.blog.utils.Constant.*;
 
@@ -32,8 +32,6 @@ public class RegistrationController {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final VerificationTokenService verificationTokenService;
     private final PasswordResetTokenService passwordResetTokenService;
-    private final RegistrationCompleteEventListener registrationCompleteEventListener;
-    private final ResetPasswordEventListener resetPasswordEventListener;
 
     @GetMapping("/registration-form")
     public String showRegistrationForm(Model model) {
@@ -43,7 +41,13 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") RegistrationRequest registrationRequest, HttpServletRequest request) {
+    public String registerUser(@ModelAttribute("user") @Valid RegistrationRequest registrationRequest,
+                               BindingResult result, HttpServletRequest request) {
+
+        if (result.hasErrors()) {
+            return "registration";
+        }
+
         User user = userService.registerUser(registrationRequest);
 
         applicationEventPublisher.publishEvent(new RegistrationCompleteEvent(user, UrlUtil.getApplicationUrl(request)));
@@ -63,11 +67,11 @@ public class RegistrationController {
 
         switch (verificationResult) {
             case EXPIRED:
-                return "redirect:/error?expired";
+                return "redirect:/registration/registration-form?expired";
             case VALID:
                 return "redirect:/login?valid";
             default:
-                return "redirect:/error?invalid";
+                return "redirect:/registration/registration-form?invalid";
         }
     }
 
@@ -100,20 +104,25 @@ public class RegistrationController {
     public String passwordResetForm(@RequestParam("token") String token, Model model) {
 
         model.addAttribute("token", token);
+        model.addAttribute("passwordResetRequest", new PasswordResetRequest());
 
         return "password-reset-form";
     }
 
     @PostMapping("/reset-password")
-    public String resetPassword(HttpServletRequest request) {
+    public String resetPassword(@ModelAttribute("passwordResetRequest") @Valid PasswordResetRequest passwordResetRequest,
+                                BindingResult bindingResult, HttpServletRequest request) {
 
         String token = request.getParameter("token");
-        String password = request.getParameter("password");
+
+        if (bindingResult.hasErrors()) {
+            return "password-reset-form";
+        }
 
         String tokenVerificationResult = passwordResetTokenService.validatePasswordResetToken(token);
 
         if (!tokenVerificationResult.equals(VALID)) {
-            return "redirect:/error?invalid_token";
+            return "redirect:/registration/forgot-password-request?invalid_token";
         }
 
         Optional<User> optionalUser = passwordResetTokenService.findUserByPasswordResetToken(token);
@@ -121,12 +130,15 @@ public class RegistrationController {
         if (optionalUser.isPresent()) {
 
             User user = optionalUser.get();
-            passwordResetTokenService.resetPassword(user, password);
+            String result = passwordResetTokenService.resetPassword(user, passwordResetRequest);
 
-            return "redirect:/login?reset_success";
+            if (result.equals(SUCCESS)) {
+                return "redirect:/login?reset_success";
+            } else {
+                return "redirect:/registration/password-reset-form?fail&token=" + token;
+            }
         }
 
-        return "redirect:/error?not_found";
-
+        return "redirect:/registration/password-reset-form?not_found&token=" + token;
     }
 }
