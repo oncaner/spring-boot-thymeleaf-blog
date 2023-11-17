@@ -38,6 +38,9 @@
         <div th:if="${errorMessage}">
             <p class="alert alert-danger" th:text="${errorMessage}"></p>
         </div>
+        <div th:if="${mailErrorMessage}">
+            <p class="alert alert-danger" th:text="${mailErrorMessage}"></p>
+        </div>
     </div>
 
     <form th:action="@{/registration/register}" th:object="${user}" method="POST">

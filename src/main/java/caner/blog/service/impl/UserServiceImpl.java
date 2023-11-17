@@ -9,7 +9,6 @@ import caner.blog.repository.UserRepository;
 import caner.blog.service.PasswordResetTokenService;
 import caner.blog.service.UserService;
 import caner.blog.service.VerificationTokenService;
-import caner.blog.common.util.UserEmailUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -95,11 +94,9 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isPresent()) {
-
             passwordResetTokenService.deletePasswordResetTokensByUserId(id);
+            verificationTokenService.deleteVerificationTokensByUserId(id);
 
-            User user = optionalUser.get();
-            verificationTokenService.deleteUserToken(user.getId());
             userRepository.deleteById(id);
         }
     }

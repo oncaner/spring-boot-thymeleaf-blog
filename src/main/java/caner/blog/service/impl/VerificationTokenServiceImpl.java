@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,7 +55,11 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public void deleteUserToken(Long id) {
-        verificationTokenRepository.deleteByUserId(id);
+    public void deleteVerificationTokensByUserId(Long id) {
+        List<VerificationToken> verificationTokenList = verificationTokenRepository.findAllByUserId(id);
+
+        if (!verificationTokenList.isEmpty()) {
+            verificationTokenRepository.deleteAll(verificationTokenList);
+        }
     }
 }

@@ -10,10 +10,12 @@ import caner.blog.model.VerificationToken;
 import caner.blog.service.PasswordResetTokenService;
 import caner.blog.service.UserService;
 import caner.blog.service.VerificationTokenService;
+import com.sun.mail.util.MailConnectException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,18 +50,29 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") @Valid RegistrationRequest registrationRequest,
-                               Model model, BindingResult result, HttpServletRequest request) {
+                               BindingResult result, Model model, HttpServletRequest request) {
+
+        User user = null;
 
         if (result.hasErrors()) {
             return "registration";
         }
 
         try {
-            User user = userService.registerUser(registrationRequest);
+            user = userService.registerUser(registrationRequest);
 
             applicationEventPublisher.publishEvent(new RegistrationCompleteEvent(user, UrlUtil.getApplicationUrl(request)));
         } catch (Exception exception) {
-            model.addAttribute("errorMessage", exception.getMessage());
+            if (exception.getClass().equals(MailSendException.class)) {
+                model.addAttribute("mailErrorMessage",
+                        "The email verification link could not be sent." +
+                                " Please check your internet speed and register again.");
+
+                verificationTokenService.deleteVerificationTokensByUserId(user.getId());
+                userService.deleteUserById(user.getId());
+            } else {
+                model.addAttribute("errorMessage", exception.getMessage());
+            }
 
             return "registration";
         }
@@ -94,7 +107,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/forgot-password")
-    public String resetPasswordRequest(HttpServletRequest request) {
+    public String resetPasswordRequest(Model model, HttpServletRequest request) {
 
         String email = request.getParameter("email");
         Optional<User> optionalUser = userService.findByEmail(email);
@@ -107,7 +120,19 @@ public class RegistrationController {
 
         String url = UrlUtil.getApplicationUrl(request);
 
-        applicationEventPublisher.publishEvent(new ResetPasswordEvent(user, url));
+        try {
+            applicationEventPublisher.publishEvent(new ResetPasswordEvent(user, url));
+        } catch (Exception exception) {
+            if (exception.getClass().equals(MailSendException.class)) {
+                model.addAttribute("passwordResetMailError",
+                        "The email password-reset link could not be sent." +
+                                " Please check your internet speed and send again.");
+
+                passwordResetTokenService.deletePasswordResetTokensByUserId(user.getId());
+
+                return "forgot-password-form";
+            }
+        }
 
         return "redirect:/registration/forgot-password-request?success";
     }
