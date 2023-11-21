@@ -10,7 +10,6 @@ import caner.blog.model.VerificationToken;
 import caner.blog.service.PasswordResetTokenService;
 import caner.blog.service.UserService;
 import caner.blog.service.VerificationTokenService;
-import com.sun.mail.util.MailConnectException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
-import static caner.blog.common.Constant.EXPIRED;
-import static caner.blog.common.Constant.SUCCESS;
-import static caner.blog.common.Constant.VALID;
+import static caner.blog.common.Constant.*;
 
 @Controller
 @RequiredArgsConstructor

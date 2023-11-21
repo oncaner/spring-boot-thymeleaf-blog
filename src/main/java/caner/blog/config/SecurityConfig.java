@@ -38,7 +38,8 @@ public class SecurityConfig {
 
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/login", "/error", "/registration/**").permitAll()
+                .requestMatchers("/", "/login", "/error", "/registration/**","/posts")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/").permitAll()
