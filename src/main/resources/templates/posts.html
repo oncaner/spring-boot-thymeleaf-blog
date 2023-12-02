@@ -32,7 +32,6 @@
         <table class="table table-striped table-dark">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">Post Id</th>
                 <th scope="col">Title</th>
                 <th scope="col">Content</th>
                 <th scope="col">User</th>
@@ -42,7 +41,6 @@
             </thead>
             <tbody>
             <tr th:each="post:${posts}">
-                <td th:text="${post.id}"></td>
                 <td th:text="${post.title}"></td>
                 <td th:text="${post.content}"></td>
                 <td th:text="${post.userDTO.nickname}"></td>

@@ -1,5 +1,6 @@
 package caner.blog.service.impl;
 
+import caner.blog.common.util.ImageValidatorUtil;
 import caner.blog.common.util.UserRegistrationHelper;
 import caner.blog.dto.request.RegistrationRequest;
 import caner.blog.dto.response.UserDTO;
@@ -9,11 +10,18 @@ import caner.blog.repository.UserRepository;
 import caner.blog.service.PasswordResetTokenService;
 import caner.blog.service.UserService;
 import caner.blog.service.VerificationTokenService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +59,7 @@ public class UserServiceImpl implements UserService {
                 .lastName(request.getLastName())
                 .nickname(userRegistrationHelper.checkNickname(request.getNickname()))
                 .email(userRegistrationHelper.checkEmail(request.getEmail()))
+                .imagePath(null)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
@@ -100,4 +109,27 @@ public class UserServiceImpl implements UserService {
             userRepository.deleteById(id);
         }
     }
+
+    @Override
+    public void uploadUserProfileImage(MultipartFile file, Long id) {
+
+        String fileName = id + "_" + StringUtils.cleanPath(file.getOriginalFilename());
+
+        ImageValidatorUtil.imageExtensionValidator(fileName); // Try Catch ekle
+
+        Path imagePath = Paths.get("src/main/resources/static/images/" + fileName);
+
+        try {
+            Files.copy(file.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            throw new RuntimeException("Resim yüklenemedi.");
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Kullanıcı bulunamadı: " + id));
+
+        user.setImagePath(fileName);
+        userRepository.save(user);
+    }
+
 }

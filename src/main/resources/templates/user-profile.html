@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/}">Home</a>
+    <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/users}">Users</a>
+    <a class="navbar-brand" th:href="@{/posts}">Posts</a>
+    <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/posts/create-post}">Create Post</a>
+    <a class="navbar-brand" th:href="@{/registration/registration-form}">Register</a>
+    <a class="navbar-brand" sec:authorize="!isAuthenticated()" href="#" th:href="@{/login}">Login</a>
+    <a class="navbar-brand" sec:authorize="isAuthenticated()" href="#" th:href="@{/logout}">Logout</a>
+</nav>
+
+<div th:if="${imageExtensionErrorMessage}" th:text="${imageExtensionErrorMessage}" class="alert alert-danger"></div>
+<div th:if="${unknownImageError}" th:text="${unknownImageError}" class="alert alert-danger"></div>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">User Profile</h5>
+                    <img th:if="${user.imagePath != null}"
+                         th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}"
+                         alt="Profile Image" class="profile-image mb-3">
+                    <img th:if="${user.imagePath == null}"
+                         src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LTNkaG9sby1wby0wMjkucG5n.png"
+                         alt="Profile Image" class="profile-image mb-3">
+                    <p class="card-text" th:text="${user.firstName}"><strong>Name:</strong></p>
+                    <p class="card-text" th:text="${user.lastName}"><strong>Last Name:</strong></p>
+                    <p class="card-text" th:text="${user.nickname}"><strong>Nickname:</strong></p>
+                    <p class="card-text" th:text="${user.email}"><strong>Email:</strong></p>
+                    <a href="#" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+            <br>
+            <form th:action="@{'/users/'+${user.id}+'/image'}" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="image" class="form-label">Profil resmi ekle</label>
+                    <input class="form-control" type="file" accept=".jpg,.jpeg,.png" id="image" name="image">
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+            <p th:text="${emptyFile}"></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

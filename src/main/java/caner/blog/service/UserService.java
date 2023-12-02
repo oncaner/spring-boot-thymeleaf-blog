@@ -3,6 +3,8 @@ package caner.blog.service;
 import caner.blog.dto.request.RegistrationRequest;
 import caner.blog.dto.response.UserDTO;
 import caner.blog.model.User;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +24,6 @@ public interface UserService {
     void updateUser(Long id, String firstName, String lastName, String email);
 
     void deleteUserById(Long id);
+
+    void uploadUserProfileImage(MultipartFile file, Long id);
 }

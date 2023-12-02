@@ -2,10 +2,7 @@ package caner.blog.model;
 
 import caner.blog.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Builder
+@ToString
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -40,6 +38,9 @@ public class User implements UserDetails {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "image_path")
+    private String imagePath;
 
     @Enumerated(EnumType.STRING)
     private Role role;

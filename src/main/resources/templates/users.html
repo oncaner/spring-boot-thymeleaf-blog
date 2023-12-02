@@ -55,6 +55,7 @@
                         <td>
                             <a href="#" th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-info">Edit</a>
                             <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a>
+                            <a th:href="@{/users/{id}(id=${user.id})}" class="btn btn-success">Profile</a>
                         </td>
                     </tr>
                     </tbody>
