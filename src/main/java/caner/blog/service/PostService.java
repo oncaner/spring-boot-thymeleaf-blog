@@ -10,6 +10,8 @@ public interface PostService {
 
     List<PostDTO> getAllPosts();
 
+    Post getPostById(Long id);
+
     Post createPost(CreatePostRequest createPostRequest);
 
     void deletePostById(Long id);

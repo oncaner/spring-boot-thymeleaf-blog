@@ -31,11 +31,14 @@ public class PostServiceImpl implements PostService {
 
         List<Post> posts = postRepository.findAll();
 
-        List<PostDTO> postDTOS = posts.stream()
+        return posts.stream()
                 .map(post -> modelMapperService.forResponse()
                         .map(post, PostDTO.class)).toList();
+    }
 
-        return postDTOS;
+    @Override
+    public Post getPostById(Long id) {
+        return postRepository.findById(id).orElseThrow();
     }
 
     @Override
