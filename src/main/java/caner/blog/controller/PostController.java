@@ -3,8 +3,10 @@ package caner.blog.controller;
 import caner.blog.common.mapper.ModelMapperService;
 import caner.blog.dto.request.CreateCommentRequest;
 import caner.blog.dto.request.CreatePostRequest;
+import caner.blog.dto.response.CommentDTO;
 import caner.blog.dto.response.PostDTO;
 import caner.blog.model.Post;
+import caner.blog.service.CommentService;
 import caner.blog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -24,11 +28,11 @@ public class PostController {
 
     private final PostService postService;
     private final ModelMapperService modelMapperService;
+    private final CommentService commentService;
 
     @GetMapping
     public String getAllUsers(Model model) {
         model.addAttribute("posts", postService.getAllPosts());
-//        model.addAttribute("comment", new CreateCommentRequest());
 
         return "posts";
     }
@@ -38,7 +42,11 @@ public class PostController {
         Post post = postService.getPostById(id);
         PostDTO postDTO = modelMapperService.forResponse().map(post, PostDTO.class);
 
+        List<CommentDTO> commentDTOS = commentService.getAllCommentsByPostId(id);
+
         model.addAttribute("post", postDTO);
+        model.addAttribute("newComment", new CreateCommentRequest());
+        model.addAttribute("comments", commentDTOS);
 
         return "post-detail";
     }
