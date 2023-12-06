@@ -19,15 +19,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" th:href="@{/}">Home</a>
-    <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/users}">Users</a>
-    <a class="navbar-brand" th:href="@{/posts}">Posts</a>
-    <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/posts/create-post}">Create Post</a>
-    <a class="navbar-brand" th:href="@{/registration/registration-form}">Register</a>
-    <a class="navbar-brand" sec:authorize="!isAuthenticated()" href="#" th:href="@{/login}">Login</a>
-    <a class="navbar-brand" sec:authorize="isAuthenticated()" href="#" th:href="@{/logout}">Logout</a>
-</nav>
+<div th:replace="~{fragment :: navbar}"></div>
 
 <div class="container">
     <div class="row">
@@ -51,7 +43,13 @@
             <tbody>
             <tr th:each="comment:${comments}">
                 <td th:text="${comment.comment}"></td>
-                <td th:text="${comment.userDTO.getNickname()}"></td>
+                <td>
+                    <span th:if="${post.userDTO.email == comment.userDTO.email}">
+                        <span th:text="${comment.userDTO.nickname + ' (Gönderi Sahibi)'}"></span>
+                    </span>
+                    <span th:unless="${post.userDTO.email == comment.userDTO.email}"
+                          th:text="${comment.userDTO.nickname}"></span>
+                </td>
                 <td th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
             </tr>
             </tbody>

@@ -10,6 +10,7 @@ import caner.blog.service.CommentService;
 import caner.blog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -31,14 +33,15 @@ public class PostController {
     private final CommentService commentService;
 
     @GetMapping
-    public String getAllUsers(Model model) {
+    public String getAllPosts(Model model) {
         model.addAttribute("posts", postService.getAllPosts());
 
         return "posts";
     }
 
     @GetMapping("/{id}")
-    public String getPostById(Model model, @PathVariable Long id) {
+    public String getPostById(@PathVariable Long id, Model model) {
+
         Post post = postService.getPostById(id);
         PostDTO postDTO = modelMapperService.forResponse().map(post, PostDTO.class);
 
@@ -71,11 +74,13 @@ public class PostController {
         return "redirect:/posts";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deletePostById(@PathVariable("id") Long id) {
-        postService.deletePostById(id);
+    //Admin paneline eklenecek.
 
-        return "redirect:/posts";
-    }
+//    @GetMapping("/delete/{id}")
+//    public String deletePostById(@PathVariable("id") Long id) {
+//        postService.deletePostById(id);
+//
+//        return "redirect:/posts";
+//    }
 
 }

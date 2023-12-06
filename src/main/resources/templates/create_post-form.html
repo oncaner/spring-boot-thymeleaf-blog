@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -56,15 +55,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" th:href="@{/}">Home</a>
-    <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/users}">Users</a>
-    <a class="navbar-brand" th:href="@{/posts}">Posts</a>
-    <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/posts/create-post}">Create Post</a>
-    <a class="navbar-brand" th:href="@{/registration/registration-form}">Register</a>
-    <a class="navbar-brand" sec:authorize="!isAuthenticated()" href="#" th:href="@{/login}">Login</a>
-    <a class="navbar-brand" sec:authorize="isAuthenticated()" href="#" th:href="@{/logout}">Logout</a>
-</nav>
+<div th:replace="~{fragment :: navbar}"></div>
 
 <br><br><br>
 <form th:action="@{/posts/create-post}" method="POST" th:object="${post}">

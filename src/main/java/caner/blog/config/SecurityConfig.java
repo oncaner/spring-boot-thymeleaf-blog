@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/").permitAll()
+                .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/",true).permitAll()
                 .and()
                 .logout().invalidateHttpSession(true).clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").permitAll()

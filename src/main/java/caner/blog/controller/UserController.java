@@ -17,25 +17,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
     private final ModelMapperService modelMapperService;
 
-    @GetMapping
-    public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+    @GetMapping()
+    public String getUserById(Model model, Principal principal) {
 
-        return "users";
+        String userEmail = principal.getName();
+
+        UserDTO user = modelMapperService.forResponse().map(userService.findByEmail(userEmail).get(), UserDTO.class);
+
+        model.addAttribute("user", user);
+
+        return "user";
     }
 
-    @GetMapping("/{id}")
-    public String getUserById(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/{id}/profile")
+    public String getUserByIdForProfile(@PathVariable("id") Long id, Model model) {
         UserDTO user = modelMapperService.forResponse().map(userService.findUserById(id).get(), UserDTO.class);
 
         model.addAttribute("user", user);
@@ -58,12 +64,14 @@ public class UserController {
         return "redirect:/users?update_success";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUserById(id);
+    //Admin paneline eklenecek.
 
-        return "redirect:/users?delete_success";
-    }
+//    @GetMapping("/delete/{id}")
+//    public String deleteUser(@PathVariable("id") Long id) {
+//        userService.deleteUserById(id);
+//
+//        return "redirect:/users?delete_success";
+//    }
 
     @PostMapping("/{id}/image")
     public String uploadUserProfileImage(@PathVariable("id") Long id,
