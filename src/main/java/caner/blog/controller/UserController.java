@@ -42,9 +42,15 @@ public class UserController {
 
     @GetMapping("/{id}/profile")
     public String getUserByIdForProfile(@PathVariable("id") Long id, Model model) {
-        UserDTO user = modelMapperService.forResponse().map(userService.findUserById(id).get(), UserDTO.class);
+        User user = userService.findUserById(id).get();
 
-        model.addAttribute("user", user);
+        UserDTO userDTO = modelMapperService.forResponse().map(user, UserDTO.class);
+
+        if (user.getImagePath() == null || user.getImagePath().isEmpty()) {
+            userDTO.setImagePath(null);
+        }
+
+        model.addAttribute("user", userDTO);
 
         return "user-profile";
     }
@@ -81,13 +87,13 @@ public class UserController {
 
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("emptyFile", "Lütfen bir resim seçiniz.");
-            return "redirect:/users/{id}";
+            return "redirect:/user/{id}/profile";
         }
 
         try {
             userService.uploadUserProfileImage(file, id);
 
-            return "redirect:/users/{id}";
+            return "redirect:/user/{id}/profile";
         } catch (Exception exception) {
             if (exception.getClass().equals(ImageExtensionException.class)) {
                 model.addAttribute("imageExtensionErrorMessage", exception.getMessage());

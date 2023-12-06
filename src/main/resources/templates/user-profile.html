@@ -31,7 +31,7 @@
                          th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}"
                          alt="Profile Image" class="profile-image mb-3">
                     <img th:if="${user.imagePath == null}"
-                         src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LTNkaG9sby1wby0wMjkucG5n.png"
+                         th:src="@{/images/default-user-image.png}"
                          alt="Profile Image" class="profile-image mb-3">
                     <p class="card-text" th:text="${user.firstName}"><strong>Name:</strong></p>
                     <p class="card-text" th:text="${user.lastName}"><strong>Last Name:</strong></p>
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <br>
-            <form th:action="@{'/users/'+${user.id}+'/image'}" method="post" enctype="multipart/form-data">
+            <form th:action="@{'/user/'+${user.id}+'/image'}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="image" class="form-label">Profil resmi ekle</label>
                     <input class="form-control" type="file" accept=".jpg,.jpeg,.png" id="image" name="image">
