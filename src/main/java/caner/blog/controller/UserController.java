@@ -41,7 +41,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profile")
-    public String getUserByIdForProfile(@PathVariable("id") Long id, Model model) {
+    public String getUserByIdForProfile(@PathVariable("id") Long id, Model model, Principal principal) {
+        String principalEmail = principal.getName();
+
         User user = userService.findUserById(id).get();
 
         UserDTO userDTO = modelMapperService.forResponse().map(user, UserDTO.class);
@@ -51,6 +53,7 @@ public class UserController {
         }
 
         model.addAttribute("user", userDTO);
+        model.addAttribute("principalEmail", principalEmail);
 
         return "user-profile";
     }

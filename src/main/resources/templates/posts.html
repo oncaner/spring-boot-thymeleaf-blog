@@ -34,7 +34,12 @@
             <tr th:each="post:${posts}">
                 <td th:text="${post.title}"></td>
                 <td th:text="${post.content}"></td>
-                <td th:text="${post.userDTO.nickname}"></td>
+                <td>
+                    <a style="text-decoration: none; color: #00ffad"
+                       th:href="@{'/user/' + ${post.userDTO.id} + '/profile'}">
+                        <span th:text="${post.userDTO.nickname}"></span>
+                    </a>
+                </td>
                 <td th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
                     <!--                    <a th:href="@{/update-post/{id}(id=${post.id})}" class="btn btn-primary">Update</a>-->

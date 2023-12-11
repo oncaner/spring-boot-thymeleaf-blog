@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+>
 
 <head>
     <meta charset="UTF-8">
@@ -45,10 +45,17 @@
                 <td th:text="${comment.comment}"></td>
                 <td>
                     <span th:if="${post.userDTO.email == comment.userDTO.email}">
+                        <a style="text-decoration: none; color: #00ffad"
+                           th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
                         <span th:text="${comment.userDTO.nickname + ' (Gönderi Sahibi)'}"></span>
+                    </a>
                     </span>
-                    <span th:unless="${post.userDTO.email == comment.userDTO.email}"
-                          th:text="${comment.userDTO.nickname}"></span>
+                    <span th:unless="${post.userDTO.email == comment.userDTO.email}">
+                    <a style="text-decoration: none; color: #00ffad"
+                       th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
+                        <span th:text="${comment.userDTO.nickname}"></span>
+                    </a>
+                    </span>
                 </td>
                 <td th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
             </tr>
