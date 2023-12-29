@@ -49,7 +49,7 @@ public class UserController {
         UserDTO userDTO = modelMapperService.forResponse().map(user, UserDTO.class);
 
         if (user.getImagePath() == null || user.getImagePath().isEmpty()) {
-            userDTO.setImagePath(null);
+            userDTO.setImagePath("default-user-image.png");
         }
 
         model.addAttribute("user", userDTO);
@@ -105,9 +105,9 @@ public class UserController {
             } else {
                 model.addAttribute("unknownImageError", "Resim yüklenirken hata oluştu.");
             }
-
-            return "user-profile";
         }
+
+        return "user-profile";
     }
 
 }

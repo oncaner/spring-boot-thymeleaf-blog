@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 .lastName(request.getLastName())
                 .nickname(userRegistrationHelper.checkNickname(request.getNickname()))
                 .email(userRegistrationHelper.checkEmail(request.getEmail()))
-                .imagePath(null)
+                .imagePath("default-user-image.png")
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();

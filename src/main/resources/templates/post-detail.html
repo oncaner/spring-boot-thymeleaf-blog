@@ -9,11 +9,133 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Post Detail</title>
-
     <style>
         .error {
             color: red;
         }
+
+        body {
+            background-color: #e9ebee;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .be-comment-block {
+            /*margin-bottom: 50px !important;*/
+            border: 1px solid #edeff2;
+            border-radius: 2px;
+            padding: 5px 5px;
+            border: 1px solid #ffffff;
+        }
+
+        .comments-title {
+            font-size: 16px;
+            color: #262626;
+            margin-bottom: 15px;
+            font-family: 'Conv_helveticaneuecyr-bold';
+        }
+
+        .be-img-comment {
+            width: 60px;
+            height: 60px;
+            float: left;
+            margin-bottom: 15px;
+        }
+
+        .be-ava-comment {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        .be-comment-content {
+            margin-left: 80px;
+        }
+
+        .be-comment-content span {
+            display: inline-block;
+            width: 49%;
+            margin-bottom: 15px;
+        }
+
+        .be-comment-name {
+            font-size: 13px;
+            font-family: 'Conv_helveticaneuecyr-bold';
+        }
+
+        .be-comment-content a {
+            color: #383b43;
+        }
+
+        .be-comment-content span {
+            display: inline-block;
+            width: 49%;
+            margin-bottom: 15px;
+        }
+
+        .be-comment-time {
+            text-align: right;
+        }
+
+        .be-comment-time {
+            font-size: 11px;
+            color: #b4b7c1;
+        }
+
+        .be-comment-text {
+            font-size: 15px;
+            line-height: 18px;
+            color: #1e2023;
+            background: #e9ebee;
+            border: 1px solid #edeff2;
+            /*padding: 5px;*/
+            word-wrap: break-word;
+            color: #420f0f;
+            white-space: pre-wrap;
+            width: 100%;
+            min-height: 100px;
+        }
+
+        .form-group.fl_icon .icon {
+            position: absolute;
+            top: 1px;
+            left: 16px;
+            width: 48px;
+            height: 48px;
+            background: #f6f6f7;
+            color: #b5b8c2;
+            text-align: center;
+            line-height: 50px;
+            -webkit-border-top-left-radius: 2px;
+            -webkit-border-bottom-left-radius: 2px;
+            -moz-border-radius-topleft: 2px;
+            -moz-border-radius-bottomleft: 2px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+
+        .form-group .form-input {
+            font-size: 13px;
+            line-height: 20px;
+            font-weight: 400;
+            color: #36383f;
+            width: 100%;
+            /*height: 25px;*/
+            padding-left: 5px;
+            padding-right: 5px;
+            border: 1px solid #edeff2;
+            border-radius: 3px;
+        }
+
+        .form-group.fl_icon .form-input {
+            padding-left: 70px;
+        }
+
+        .form-group textarea.form-input {
+            height: 150px;
+        }
+
     </style>
 </head>
 
@@ -21,56 +143,82 @@
 
 <div th:replace="~{fragment :: navbar}"></div>
 
-<div class="container">
-    <div class="row">
-        <h1>Post Detail</h1>
-    </div>
+<br>
+<div class="row">
+    <div class="col-md-10 offset-md-2">
+        <div class="col-lg-8">
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 th:text="${post.title}" class="fw-bolder mb-2" style="color: darkblue"></h1>
+                    <a style="text-decoration: none; color: #00ffad"
+                       th:href="@{'/user/' + ${post.userDTO.id} + '/profile'}">
+                        <p th:text="${post.userDTO.nickname} + ' tarafından yayınlandı.'" class="lead"
+                           style="font-size: 14px;color:#ff2020;"></p>
+                    </a>
+                    <!-- Post meta <content-->
+                    <hr>
+                    <div th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss') + ' tarihinde yayınlandı.'}"
+                         class="text-muted fst-italic mb-2"></div>
+                    <hr>
+                </header>
+                <!-- Post content-->
+                <section class="mb-5">
+                    <p th:utext="${post.content}"></p>
+                </section>
+                <hr>
+            </article>
+            <div th:each="comment:${comments}" class="be-comment-block">
+                <!--                <h1 class="comments-title">Comments (3)</h1>-->
+                <div class="be-comment">
+                    <div class="be-img-comment">
+                        <a th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
+                            <img th:src="@{/images/{imagePath}(imagePath=${comment.userDTO.imagePath})}" alt=""
+                                 class="be-ava-comment">
+                        </a>
+                    </div>
+                    <div class="be-comment-content">
 
-    <div class="row">
-        <p th:text="${post.title}"></p>
-        <p th:text="${post.content}"></p>
-        <p th:text="${post.userDTO.nickname}"></p>
-        <p th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></p>
-
-        <table class="table table-striped table-dark">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Comment</th>
-                <th scope="col">Nickname</th>
-                <th scope="col">Created Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="comment:${comments}">
-                <td th:text="${comment.comment}"></td>
-                <td>
-                    <span th:if="${post.userDTO.email == comment.userDTO.email}">
-                        <a style="text-decoration: none; color: #00ffad"
+				<span class="be-comment-name" th:if="${post.userDTO.email == comment.userDTO.email}">
+                        <a style="text-decoration: none; color: #00159d;
+                        font-weight: bold; font-size: 1rem"
                            th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
                         <span th:text="${comment.userDTO.nickname + ' (Gönderi Sahibi)'}"></span>
                     </a>
                     </span>
-                    <span th:unless="${post.userDTO.email == comment.userDTO.email}">
-                    <a style="text-decoration: none; color: #00ffad"
+                        <span th:unless="${post.userDTO.email == comment.userDTO.email}">
+                    <a style="text-decoration: none; color: #00159d;
+                        font-weight: bold; font-size: 1rem"
                        th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
                         <span th:text="${comment.userDTO.nickname}"></span>
                     </a>
                     </span>
-                </td>
-                <td th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            </tr>
-            </tbody>
-        </table>
+                        <span th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"
+                              class="be-comment-time">
+					<i class="fa fa-clock-o"></i></span>
 
-    </div>
-    <form th:action="@{'/posts/'+${post.id}+'/create-comment'}" method="POST" th:object="${newComment}">
-        <div class="form-group">
-            <label for="comment">Comment:</label>
-            <input th:field="*{comment}" type="text" id="comment" name="comment" required/>
+                        <div th:text="${comment.comment}" class="be-comment-text"></div>
+                    </div>
+                </div>
+            </div>
+            <form th:action="@{'/posts/'+${post.id}+'/create-comment'}" method="POST" th:object="${newComment}"
+                  class="form-block">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                                <textarea th:field="*{comment}" id="comment" name="comment" class="form-input"
+                                          style="resize: none" required
+                                          placeholder="Yorum yap..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary pull-right">Yorum ekle</button>
+                        <div th:if="${commentSizeError}" style="margin-top: 5px" th:text="${commentSizeError}" class="alert alert-danger"></div>
+                        <div th:unless="${commentSizeError}" class="alert alert-danger" style="display: none"></div>
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <button type="submit">Add Comment</button>
-    </form>
+    </div>
 </div>
 
 </body>

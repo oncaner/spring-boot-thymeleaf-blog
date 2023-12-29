@@ -4,14 +4,12 @@ import caner.blog.dto.request.CreateCommentRequest;
 import caner.blog.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -24,7 +22,13 @@ public class CommentController {
     @PostMapping("/posts/{id}/create-comment")
     public String createComment(@Valid @ModelAttribute("comment") CreateCommentRequest createCommentRequest,
                                 BindingResult result, @PathVariable Long id,
-                                Principal principal) {
+                                Principal principal,RedirectAttributes redirectAttributes) {
+
+        if (createCommentRequest.getComment().length() >= 750) {
+            redirectAttributes.addFlashAttribute("commentSizeError",
+                    "Yorumunuz maksimum 750 karakter olmak zorundadır!");
+            return "redirect:/posts/{id}";
+        }
 
         if (result.hasErrors()) {
             return "redirect:/posts/{id}";

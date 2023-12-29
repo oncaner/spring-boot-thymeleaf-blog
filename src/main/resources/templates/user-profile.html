@@ -12,27 +12,31 @@
             object-fit: cover;
             border-radius: 50%;
         }
+
+        body {
+            background-color: #e9ebee;
+        }
     </style>
 </head>
 <body>
 
 <div th:replace="~{fragment :: navbar}"></div>
 
-<div th:if="${imageExtensionErrorMessage}" th:text="${imageExtensionErrorMessage}" class="alert alert-danger"></div>
-<div th:if="${unknownImageError}" th:text="${unknownImageError}" class="alert alert-danger"></div>
 
 <div class="container mt-3">
     <div class="row">
         <div class="col-md-6 offset-md-3">
+            <div th:if="${imageExtensionErrorMessage}" th:text="${imageExtensionErrorMessage}" class="alert alert-danger"></div>
+            <div th:if="${unknownImageError}" th:text="${unknownImageError}" class="alert alert-danger"></div>
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">User Profile</h5>
                     <img th:if="${user.imagePath != null}"
                          th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}"
                          alt="Profile Image" class="profile-image mb-3">
-                    <img th:if="${user.imagePath == null}"
-                         th:src="@{/images/default-user-image.png}"
-                         alt="Profile Image" class="profile-image mb-3">
+<!--                    <img th:if="${user.imagePath == null}"-->
+<!--                         th:src="@{/images/default-user-image.png}"-->
+<!--                         alt="Profile Image" class="profile-image mb-3">-->
                     <p class="card-text" th:text="${user.firstName}"><strong>Name:</strong></p>
                     <p class="card-text" th:text="${user.lastName}"><strong>Last Name:</strong></p>
                     <p class="card-text" th:text="${user.nickname}"><strong>Nickname:</strong></p>

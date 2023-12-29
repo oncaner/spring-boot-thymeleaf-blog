@@ -33,7 +33,7 @@
             <tbody>
             <tr th:each="post:${posts}">
                 <td th:text="${post.title}"></td>
-                <td th:text="${post.content}"></td>
+                <td th:utext="${post.content}"></td>
                 <td>
                     <a style="text-decoration: none; color: #00ffad"
                        th:href="@{'/user/' + ${post.userDTO.id} + '/profile'}">
