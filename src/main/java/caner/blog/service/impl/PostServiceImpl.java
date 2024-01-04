@@ -2,12 +2,14 @@ package caner.blog.service.impl;
 
 import caner.blog.common.mapper.ModelMapperService;
 import caner.blog.dto.request.CreatePostRequest;
+import caner.blog.dto.request.UpdatePostRequest;
 import caner.blog.dto.response.PostDTO;
 import caner.blog.model.Post;
 import caner.blog.model.User;
 import caner.blog.repository.PostRepository;
 import caner.blog.service.PostService;
 import caner.blog.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -70,5 +72,19 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePostById(Long id) {
         postRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void updatePost(UpdatePostRequest updatePostRequest, HttpServletRequest request) {
+
+        String postId = request.getParameter("postId");
+        Long id = Long.parseLong(postId);
+
+        Post post = getPostById(id);
+        post.setTitle(updatePostRequest.getTitle());
+        post.setContent(updatePostRequest.getContent());
+
+        postRepository.save(post);
     }
 }

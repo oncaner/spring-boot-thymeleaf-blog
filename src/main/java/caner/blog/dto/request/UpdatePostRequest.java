@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreatePostRequest {
+public class UpdatePostRequest {
 
     @NotNull(message = "Bu alanı doldurunuz!")
     @NotBlank(message = "Boş geçilemez!")

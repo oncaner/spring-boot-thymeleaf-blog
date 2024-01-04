@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <title>Update Post</title>
+    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+    <style>
+        form {
+            margin: auto;
+            width: 50%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+        }
+
+        body {
+            background-color: #e9ebee;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div th:replace="~{fragment :: navbar}"></div>
+
+<br><br><br>
+<form th:action="@{/posts/update-post}" method="POST" th:object="${post}">
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input th:field="*{title}" type="text" id="title" name="title" required/>
+        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+             th:errorclass="error"></div>
+    </div>
+    <div class="form-group">
+        <label for="content">Content:</label>
+        <textarea th:field="*{content}" id="content" name="content" required></textarea>
+        <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" th:errorclass="error"></div>
+    </div>
+    <input type="hidden" th:value="${post.id}" name="postId">
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    CKEDITOR.replace('content');
+</script>
+</body>
+
+</html>

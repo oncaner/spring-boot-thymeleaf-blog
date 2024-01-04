@@ -3,11 +3,13 @@ package caner.blog.controller;
 import caner.blog.common.mapper.ModelMapperService;
 import caner.blog.dto.request.CreateCommentRequest;
 import caner.blog.dto.request.CreatePostRequest;
+import caner.blog.dto.request.UpdatePostRequest;
 import caner.blog.dto.response.CommentDTO;
 import caner.blog.dto.response.PostDTO;
 import caner.blog.model.Post;
 import caner.blog.service.CommentService;
 import caner.blog.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -72,6 +74,32 @@ public class PostController {
         postService.createPost(createPostRequest);
 
         return "redirect:/posts";
+    }
+
+    @GetMapping("/update-post/{id}")
+    public String showUpdatePostForm(@PathVariable("id") Long id, Model model) {
+
+        Post post = postService.getPostById(id);
+
+        model.addAttribute("post", post);
+
+        return "update_post-form";
+    }
+
+    @PostMapping("/update-post")
+    public String updatePost(@Valid @ModelAttribute("post") UpdatePostRequest updatePostRequest,
+                             BindingResult result, HttpServletRequest request) {
+
+        if (result.hasErrors()) {
+            return "update_post-form";
+        }
+
+        String postId = request.getParameter("postId");
+        long id = Long.parseLong(postId);
+
+        postService.updatePost(updatePostRequest, request);
+
+        return "redirect:/posts/" + id;
     }
 
     //Admin paneline eklenecek.
