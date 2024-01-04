@@ -3,21 +3,26 @@ package caner.blog.model;
 import caner.blog.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
-@ToString
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
 
     @Serial
@@ -48,6 +53,12 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
 
     @Column(name = "is_enabled")
     private boolean isEnabled = false;

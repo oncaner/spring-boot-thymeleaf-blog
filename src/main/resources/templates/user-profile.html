@@ -3,64 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <title>User Profile</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
     <style>
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
         body {
             background-color: #e9ebee;
         }
+
+        #post-process th {
+            text-align: center;
+            font-weight: bolder;
+            color: #14538f;
+            background-color: #E9EBEE;
+        }
+
+        #post-process:hover {
+            background-color: #eee4e4;
+        }
+
+        #post-process-data {
+            text-align: center;
+            font-weight: bolder;
+            background-color: #E9EBEE;
+        }
+
+        #post-process-data:hover {
+            background-color: #eee4e4;
+        }
+
+        .table-user-information tbody tr:hover {
+            background-color: #eee4e4;
+        }
+
     </style>
 </head>
 <body>
 
 <div th:replace="~{fragment :: navbar}"></div>
+<div class="container bootstrap snippets bootdey" style="width: 75%">
+    <div style="display: flex; flex-direction: column">
 
+        <div class="panel-body inf-content" style="display: flex;margin-top: 3.5rem">
+            <div class="row" th:object="${user}" style="
+        justify-content: space-between; border-bottom: 1px solid #c4c0c0;
+        border-right:1px solid #c4c0c0 ">
+                <div class="col-md-4">
+                    <img alt="" style="width:600px;" title="" class="img-circle img-thumbnail isTooltip"
+                         th:if="${user.imagePath != null}"
+                         th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}" data-original-title="Usuario">
+                </div>
+                <div class="col-md-6" style="margin-top: 2.5rem;margin-bottom: 3rem">
+                    <div class="table-responsive">
+                        <table class="table table-user-information">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="glyphicon glyphicon-user  text-primary"></span>
+                                        First Name
+                                    </strong>
+                                </td>
+                                <td class="text-primary" th:text="${user.firstName}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="glyphicon glyphicon-cloud text-primary"></span>
+                                        Last Name
+                                    </strong>
+                                </td>
+                                <td class="text-primary" th:text="${user.lastName}">
+                                </td>
+                            </tr>
 
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div th:if="${imageExtensionErrorMessage}" th:text="${imageExtensionErrorMessage}" class="alert alert-danger"></div>
-            <div th:if="${unknownImageError}" th:text="${unknownImageError}" class="alert alert-danger"></div>
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">User Profile</h5>
-                    <img th:if="${user.imagePath != null}"
-                         th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}"
-                         alt="Profile Image" class="profile-image mb-3">
-<!--                    <img th:if="${user.imagePath == null}"-->
-<!--                         th:src="@{/images/default-user-image.png}"-->
-<!--                         alt="Profile Image" class="profile-image mb-3">-->
-                    <p class="card-text" th:text="${user.firstName}"><strong>Name:</strong></p>
-                    <p class="card-text" th:text="${user.lastName}"><strong>Last Name:</strong></p>
-                    <p class="card-text" th:text="${user.nickname}"><strong>Nickname:</strong></p>
-                    <div th:if="${user.email == principalEmail}">
-                        <span class="card-text" th:text="${user.email}"><strong>Email:</strong></span>
-                    </div>
-                    <div th:if="${user.email == principalEmail}">
-                        <br>
-                        <a href="#" class="btn btn-primary">Edit Profile</a>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="glyphicon glyphicon-bookmark text-primary"></span>
+                                        Username
+                                    </strong>
+                                </td>
+                                <td class="text-primary" th:text="${user.nickname}">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="glyphicon glyphicon-eye-open text-primary"></span>
+                                        Role
+                                    </strong>
+                                </td>
+                                <td class="text-primary" th:text="${user.role}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="glyphicon glyphicon-envelope text-primary"></span>
+                                        Email
+                                    </strong>
+                                </td>
+                                <td class="text-primary" th:text="${user.email}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="glyphicon glyphicon-calendar text-primary"></span>
+                                        Created
+                                    </strong>
+                                </td>
+                                <td class="text-primary"
+                                    th:text="${#temporals.format(user.createdDate, 'yyyy-MM-dd HH:mm:ss')}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="glyphicon glyphicon-calendar text-primary"></span>
+                                        Modified
+                                    </strong>
+                                </td>
+                                <td class="text-primary"
+                                    th:text="${#temporals.format(user.updatedDate, 'yyyy-MM-dd HH:mm:ss')}">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                <div>
+                    <table class="table">
+                        <thead>
+                        <tr id="post-process">
+                            <th scope="col">Title</th>
+                            <!--                            <th scope="col">Content</th>-->
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="post-process-data" th:each="post:${posts}">
+                            <td th:text="${post.title}"></td>
+                            <!--                            <td th:utext="${post.content}"></td>-->
+                            <!--                            <td th:utext="${@truncateTextUtil.truncateText(post.content, 50)}"></td>-->
+                            <td>
+                                <a th:href="@{/update-post/{id}(id=${post.id})}" class="btn btn-primary">Update</a>
+                                <a th:href="@{/posts/{id}(id=${post.id})}" class="btn btn-primary">Go To Post</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <br>
-            <div th:if="${user.email == principalEmail}">
-                <form th:action="@{'/user/'+${user.id}+'/image'}" method="post" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Profil resmi ekle</label>
-                        <input class="form-control" type="file" accept=".jpg,.jpeg,.png" id="image" name="image">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </form>
-            </div>
-            <p th:text="${emptyFile}"></p>
         </div>
+
     </div>
 </div>
 

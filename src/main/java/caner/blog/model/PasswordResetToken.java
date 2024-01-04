@@ -3,11 +3,14 @@ package caner.blog.model;
 import caner.blog.common.util.TokenExpirationTime;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "password_reset_tokens")

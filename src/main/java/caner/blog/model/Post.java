@@ -1,24 +1,23 @@
 package caner.blog.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "posts")
 public class Post {
 
@@ -35,8 +34,10 @@ public class Post {
     private String content;
 
     @CreatedDate
-    @Column(name = "created_date")
     private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

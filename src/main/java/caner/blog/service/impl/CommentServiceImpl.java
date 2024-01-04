@@ -42,7 +42,6 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = Comment.builder()
                 .comment(request.getComment())
-                .createdDate(LocalDateTime.now())
                 .post(post)
                 .user(user.get())
                 .build();

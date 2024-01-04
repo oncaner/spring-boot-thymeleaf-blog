@@ -8,13 +8,12 @@ import caner.blog.model.User;
 import caner.blog.repository.PostRepository;
 import caner.blog.service.PostService;
 import caner.blog.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +36,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
+    public List<PostDTO> getAllPostsByUserId(Long id) {
+        List<Post> postList = postRepository.findAllByUserId(id);
+
+        return postList.stream()
+                .map(post -> modelMapperService.forResponse()
+                        .map(post, PostDTO.class)).toList();
+    }
+
+    @Override
     public Post getPostById(Long id) {
         return postRepository.findById(id).orElseThrow();
     }
@@ -52,7 +61,6 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder()
                 .title(createPostRequest.getTitle())
                 .content(createPostRequest.getContent())
-                .createdDate(LocalDateTime.now())
                 .user(user.get())
                 .build();
 
