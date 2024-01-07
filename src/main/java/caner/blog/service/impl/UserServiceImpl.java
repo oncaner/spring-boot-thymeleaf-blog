@@ -3,8 +3,11 @@ package caner.blog.service.impl;
 import caner.blog.common.util.ImageValidatorUtil;
 import caner.blog.common.util.UserRegistrationHelper;
 import caner.blog.dto.request.RegistrationRequest;
+import caner.blog.dto.request.UpdateUserInformationRequest;
 import caner.blog.dto.response.UserDTO;
 import caner.blog.enums.Role;
+import caner.blog.exception.FirstAndLastNameException;
+import caner.blog.exception.NicknameSizeException;
 import caner.blog.model.User;
 import caner.blog.repository.UserRepository;
 import caner.blog.service.PasswordResetTokenService;
@@ -22,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -86,13 +90,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(Long id, String firstName, String lastName, String email) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        User user = optionalUser.get();
+    public void updateUser(UserDTO request, Principal principal) {
+        String email = principal.getName();
 
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
+        User user = findByEmail(email).orElseThrow();
+
+        if (request.getLastName().isEmpty() || request.getLastName().isBlank() || request.getFirstName().isEmpty() ||
+                request.getFirstName().isBlank()) {
+            throw new FirstAndLastNameException("İsim veya soyisim boş bırakılamaz.");
+        }
+
+        if(request.getNickname().isEmpty() || request.getNickname().isBlank() ||
+                request.getNickname().length() < 3 || request.getNickname().length() > 20) {
+            throw new NicknameSizeException("Username 3 ile 20 karakter arasında olmalıdır.");
+        }
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setNickname(request.getNickname());
 
         userRepository.save(user);
     }

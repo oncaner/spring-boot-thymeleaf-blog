@@ -63,7 +63,8 @@
 <div th:replace="~{fragment :: navbar}"></div>
 
 <br><br><br>
-<form th:action="@{/posts/create-post}" method="POST" th:object="${post}">
+<form th:action="@{/posts/create-post}" method="POST" th:object="${post}"
+      style="width: 85%">
     <div class="form-group">
         <label for="title">Title:</label>
         <input th:field="*{title}" type="text" id="title" name="title" required/>

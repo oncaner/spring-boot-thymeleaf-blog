@@ -22,16 +22,13 @@
 
 <div th:replace="~{fragment :: navbar}"></div>
 
-<div class="row mt-2">
+<div class="container bootstrap snippets bootdey" style="width: 90%">
     <div th:if="${param.update_success}" class="alert alert-info">
         User has been updated successfully.
     </div>
     <div th:if="${param.delete_success}" class="alert alert-info">
         User has been deleted successfully.
     </div>
-</div>
-
-<div class="container bootstrap snippets bootdey" style="width: 90%">
     <div class="panel-body inf-content" style="display: flex;margin-top: 3.5rem">
         <div class="row" th:object="${user}" style="display: flex;justify-content: space-between">
             <div class="col-md-4">
@@ -39,29 +36,11 @@
                      th:if="${user.imagePath != null}"
                      th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}" data-original-title="Usuario">
 
-                <div class="image-upload-button">
-                    <div th:if="${user.email == principalEmail}">
-                        <form th:action="@{'/user/'+${user.id}+'/image'}" method="post" enctype="multipart/form-data">
-                            <br>
-                            <div class="mb-3">
-                                <input class="form-control" type="file" accept=".jpg,.jpeg,.png"
-                                       id="image" name="image"
-                                       style="background-color: #E9EBEE;color: #003180">
-                            </div>
-                            <br>
-                            <button type="submit" class="btn btn-primary">Upload</button>
-                        </form>
-                        <br>
-                        <div th:if="${emptyFile}" th:text="${emptyFile}" class="alert alert-danger"></div>
-                        <div th:if="${unknownImageError}" th:text="${unknownImageError}"
-                             class="alert alert-danger"></div>
-                        <div th:if="${imageExtensionErrorMessage}" th:text="${imageExtensionErrorMessage}"
-                             class="alert alert-danger"></div>
-                    </div>
-                    <br>
-                    <a class="btn btn-primary" th:href="@{'/user/'+${user.id}+'/profile'}"
+                <div class="edit-profile-go-to-post-buttons">
+                    <br><br><br>
+                    <a class="btn btn-primary" th:href="@{/user/edit}">Edit Profile</a>
+                    <a class="btn btn-info" th:href="@{'/user/'+${user.id}+'/profile'}"
                        style="align-self: flex-end">My Posts</a>
-
                 </div>
             </div>
             <div class="col-md-6" style="margin-top: 2.5rem">
@@ -107,8 +86,8 @@
                                     Role
                                 </strong>
                             </td>
-                            <td class="text-primary" th:text="${user.role}">
-                            </td>
+                            <td class="text-primary" th:if="${user.role == 'ROLE_ADMIN'}">ADMIN</td>
+                            <td class="text-primary" th:unless="${user.role == 'ROLE_ADMIN'}">USER</td>
                         </tr>
                         <tr>
                             <td>

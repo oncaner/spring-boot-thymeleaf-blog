@@ -94,8 +94,8 @@
                                         Role
                                     </strong>
                                 </td>
-                                <td class="text-primary" th:text="${user.role}">
-                                </td>
+                                <td class="text-primary" th:if="${user.role == 'ROLE_ADMIN'}">ADMIN</td>
+                                <td class="text-primary" th:unless="${user.role == 'ROLE_ADMIN'}">USER</td>
                             </tr>
                             <tr>
                                 <td>

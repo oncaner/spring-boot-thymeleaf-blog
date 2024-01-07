@@ -23,6 +23,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ProblemDetails handleFirstAndLastNameException(FirstAndLastNameException exception) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage(exception.getMessage());
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ProblemDetails handleEmailAlreadyExistsException(EmailAlreadyExistsException exception) {
         ProblemDetails problemDetails = new ProblemDetails();
         problemDetails.setMessage(exception.getMessage());

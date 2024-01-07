@@ -1,22 +1,17 @@
-package caner.blog.dto.response;
+package caner.blog.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
-
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDTO {
-
-    private Long id;
+public class UpdateUserInformationRequest {
 
     @NotNull(message = "Bu alanı doldurunuz!")
     @NotBlank(message = "Boş geçilemez!")
@@ -31,17 +26,8 @@ public class UserDTO {
     @Size(min = 5, max = 25, message = "Nickname 5 ile 25 arasında olmak zorunda!")
     private String nickname;
 
-    private String imagePath;
-
-//    @NotNull(message = "Bu alanı doldurunuz!")
-//    @NotBlank(message = "Boş geçilemez!")
-//    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Geçersiz e-posta adresi")
+    @NotNull(message = "Bu alanı doldurunuz!")
+    @NotBlank(message = "Boş geçilemez!")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Geçersiz e-posta adresi")
     private String email;
-
-    private String role;
-
-    private LocalDateTime createdDate;
-
-    private LocalDateTime updatedDate;
-
 }

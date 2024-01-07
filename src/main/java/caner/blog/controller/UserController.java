@@ -1,15 +1,20 @@
 package caner.blog.controller;
 
 import caner.blog.common.mapper.ModelMapperService;
+import caner.blog.dto.request.UpdateUserInformationRequest;
 import caner.blog.dto.response.PostDTO;
 import caner.blog.dto.response.UserDTO;
+import caner.blog.exception.FirstAndLastNameException;
 import caner.blog.exception.ImageExtensionException;
+import caner.blog.exception.NicknameSizeException;
 import caner.blog.model.User;
 import caner.blog.service.PostService;
 import caner.blog.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -67,23 +72,40 @@ public class UserController {
         return "user-profile";
     }
 
-    @GetMapping("/edit/{id}")
-    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
-        Optional<User> optionalUser = userService.findUserById(id);
-        model.addAttribute("user", optionalUser.get());
+    @GetMapping("/edit")
+    public String showUpdateForm(Model model, Principal principal) {
+
+        String principalEmail = principal.getName();
+
+        Optional<User> optionalUser = userService.findByEmail(principalEmail);
+        UserDTO userDTO = modelMapperService.forResponse().map(optionalUser.get(), UserDTO.class);
+
+        model.addAttribute("user", userDTO);
+        model.addAttribute("principalEmail", principalEmail);
 
         return "update-user";
     }
 
-    @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") User user) {
-        userService.updateUser(id, user.getFirstName(), user.getLastName(), user.getEmail());
+    @PostMapping("/update-profile")
+    public String updateUser(@ModelAttribute("user") UserDTO request, Principal principal,
+                             RedirectAttributes redirectAttributes) {
 
-        return "redirect:/users?update_success";
+        try {
+            userService.updateUser(request, principal);
+        } catch (FirstAndLastNameException exception) {
+            redirectAttributes.addFlashAttribute("firstAndLastNameException", exception.getMessage());
+            return "redirect:/user/edit";
+        }
+        catch (NicknameSizeException exception) {
+            redirectAttributes.addFlashAttribute("nicknameSizeException", exception.getMessage());
+            return "redirect:/user/edit";
+        }
+
+        return "redirect:/user?update_success";
     }
 
-    //Admin paneline eklenecek.
-
+//    Admin paneline eklenecek.
+//
 //    @GetMapping("/delete/{id}")
 //    public String deleteUser(@PathVariable("id") Long id) {
 //        userService.deleteUserById(id);
@@ -91,19 +113,21 @@ public class UserController {
 //        return "redirect:/users?delete_success";
 //    }
 
-    @PostMapping("/{id}/image")
-    public String uploadUserProfileImage(@PathVariable("id") Long id,
-                                         @RequestParam("image") MultipartFile file,
-                                         RedirectAttributes redirectAttributes
+    @PostMapping("/upload-user-image")
+    public String uploadUserProfileImage(@RequestParam("image") MultipartFile file,
+                                         RedirectAttributes redirectAttributes, Principal principal
     ) {
+
+        String principalName = principal.getName();
+        Optional<User> user = userService.findByEmail(principalName);
 
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("emptyFile", "Lütfen bir resim seçiniz.");
-            return "redirect:/user";
+            return "redirect:/user/edit";
         }
 
         try {
-            userService.uploadUserProfileImage(file, id);
+            userService.uploadUserProfileImage(file, user.get().getId());
 
             return "redirect:/user";
         } catch (Exception exception) {
@@ -112,7 +136,7 @@ public class UserController {
             } else {
                 redirectAttributes.addFlashAttribute("unknownImageError", "Resim yüklenirken hata oluştu.");
             }
-            return "redirect:/user";
+            return "redirect:/user/edit";
         }
     }
 
