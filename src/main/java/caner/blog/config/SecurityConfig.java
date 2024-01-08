@@ -1,5 +1,6 @@
 package caner.blog.config;
 
+import caner.blog.exception.CustomAccessDeniedHandler;
 import caner.blog.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -34,18 +36,26 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/login", "/error", "/registration/**","/posts")
+                .requestMatchers("/", "/login", "/error", "/registration/**", "/posts")
                 .permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/",true).permitAll()
+                .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/", true).permitAll()
                 .and()
                 .logout().invalidateHttpSession(true).clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").permitAll()
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                 .and()
                 .build();
     }

@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
                 .email(userRegistrationHelper.checkEmail(request.getEmail()))
                 .imagePath("default-user-image.png")
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
 
         return userRepository.save(user);
