@@ -17,6 +17,6 @@ public class CreateCommentRequest {
 
     @NotNull(message = "Bu alanı doldurunuz!")
     @NotBlank(message = "Boş geçilemez!")
-    @Size(min = 1, max = 750, message = "Yorumunuz maksimum 750 karakter olmak zorundadır!")
+    @Size(min = 1, max = 1000, message = "Yorumunuz maksimum 1000 karakter olmak zorundadır!")
     private String comment;
 }

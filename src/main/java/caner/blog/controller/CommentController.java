@@ -24,9 +24,9 @@ public class CommentController {
                                 BindingResult result, @PathVariable Long id,
                                 Principal principal,RedirectAttributes redirectAttributes) {
 
-        if (createCommentRequest.getComment().length() >= 750) {
+        if (createCommentRequest.getComment().length() >= 1000) {
             redirectAttributes.addFlashAttribute("commentSizeError",
-                    "Yorumunuz maksimum 750 karakter olmak zorundadır!");
+                    "Yorumunuz maksimum 1000 karakter olmak zorundadır!");
             return "redirect:/posts/{id}";
         }
 

@@ -24,6 +24,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            overflow-x: hidden;
         }
 
         .be-comment-block {
@@ -32,6 +33,7 @@
             border-radius: 2px;
             padding: 5px 5px;
             border: 1px solid #ffffff;
+            width: 100%;
         }
 
         .comments-title {
@@ -89,14 +91,14 @@
         }
 
         .be-comment-text {
-            font-size: 15px;
-            line-height: 18px;
-            color: #1e2023;
+            font-size: 14px;
+            font-family: Bahnschrift;
+            line-height: 22px;
             background: #e9ebee;
             border: 1px solid #edeff2;
             /*padding: 5px;*/
             word-wrap: break-word;
-            color: #420f0f;
+            color: #2d2525;
             white-space: pre-wrap;
             width: 100%;
             min-height: 30px;
@@ -171,8 +173,8 @@
                     <div style="border-bottom: 1px solid #ababab;margin: 1.5rem 0"></div>
                 </header>
                 <!-- Post content-->
-                <section class="mb-5">
-                    <p th:utext="${post.content}"></p>
+                <section class="mb-5" style="overflow-wrap: break-word;">
+                    <div th:utext="${post.content}" style="white-space: pre-wrap;"></div>
                 </section>
                 <hr>
             </article>
