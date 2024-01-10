@@ -71,9 +71,9 @@ public class PostController {
             return "create_post-form";
         }
 
-        postService.createPost(createPostRequest);
+        Post post = postService.createPost(createPostRequest);
 
-        return "redirect:/posts";
+        return "redirect:/posts/" + post.getId();
     }
 
     @GetMapping("/update-post/{id}")

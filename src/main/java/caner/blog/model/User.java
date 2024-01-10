@@ -63,6 +63,9 @@ public class User implements UserDetails {
     @Column(name = "is_enabled")
     private boolean isEnabled = false;
 
+    @Column(name = "is_account_non_locked")
+    private boolean isAccountNonLocked = true;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
 
@@ -91,7 +94,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isAccountNonLocked;
     }
 
     @Override

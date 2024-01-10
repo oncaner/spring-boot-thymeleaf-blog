@@ -1,10 +1,8 @@
 package caner.blog.service;
 
 import caner.blog.dto.request.RegistrationRequest;
-import caner.blog.dto.request.UpdateUserInformationRequest;
 import caner.blog.dto.response.UserDTO;
 import caner.blog.model.User;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -28,4 +26,8 @@ public interface UserService {
     void deleteUserById(Long id);
 
     void uploadUserProfileImage(MultipartFile file, Long id);
+
+    void lockUser(Long id);
+
+    void unlockUser(Long id);
 }

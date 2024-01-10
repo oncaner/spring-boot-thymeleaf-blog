@@ -40,8 +40,11 @@ public class UserDTO {
 
     private String role;
 
+    private boolean isEnabled;
+
+    private boolean isAccountNonLocked;
+
     private LocalDateTime createdDate;
 
     private LocalDateTime updatedDate;
-
 }

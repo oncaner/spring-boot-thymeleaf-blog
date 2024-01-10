@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+>
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
@@ -32,6 +32,10 @@
 
                                 <div th:if="${param.error}" class="col-sm-8">
                                     <p class="alert alert-danger">Invalid email or password</p>
+                                </div>
+
+                                <div th:if="${param.userLocked}" class="col-sm-8">
+                                    <p class="alert alert-danger">Account is locked!</p>
                                 </div>
 
                                 <div th:if="${param.verified}" class="col-sm-8">

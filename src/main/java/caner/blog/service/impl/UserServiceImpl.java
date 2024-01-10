@@ -1,13 +1,15 @@
 package caner.blog.service.impl;
 
+import caner.blog.common.mapper.ModelMapperService;
 import caner.blog.common.util.ImageValidatorUtil;
 import caner.blog.common.util.UserRegistrationHelper;
 import caner.blog.dto.request.RegistrationRequest;
-import caner.blog.dto.request.UpdateUserInformationRequest;
 import caner.blog.dto.response.UserDTO;
 import caner.blog.enums.Role;
+import caner.blog.exception.AdminCannotBeLockedException;
 import caner.blog.exception.FirstAndLastNameException;
 import caner.blog.exception.NicknameSizeException;
+import caner.blog.exception.UserNotFoundException;
 import caner.blog.model.User;
 import caner.blog.repository.UserRepository;
 import caner.blog.service.PasswordResetTokenService;
@@ -39,21 +41,15 @@ public class UserServiceImpl implements UserService {
     private final VerificationTokenService verificationTokenService;
     private final PasswordResetTokenService passwordResetTokenService;
     private final UserRegistrationHelper userRegistrationHelper;
+    private final ModelMapperService modelMapperService;
 
     @Override
     public List<UserDTO> getAllUsers() {
         List<User> userList = userRepository.findAll();
-        List<UserDTO> userDTOS = new ArrayList<>();
 
-        userList.forEach(user -> userDTOS.add(UserDTO.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build()));
-
-        return userDTOS;
+        return userList.stream()
+                .map(user -> modelMapperService.forResponse()
+                        .map(user, UserDTO.class)).toList();
     }
 
     @Override
@@ -100,7 +96,7 @@ public class UserServiceImpl implements UserService {
             throw new FirstAndLastNameException("İsim veya soyisim boş bırakılamaz.");
         }
 
-        if(request.getNickname().isEmpty() || request.getNickname().isBlank() ||
+        if (request.getNickname().isEmpty() || request.getNickname().isBlank() ||
                 request.getNickname().length() < 3 || request.getNickname().length() > 20) {
             throw new NicknameSizeException("Username 3 ile 20 karakter arasında olmalıdır.");
         }
@@ -141,10 +137,39 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Kullanıcı bulunamadı: " + id));
+                .orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı: " + id));
 
         user.setImagePath(fileName);
         userRepository.save(user);
+    }
+
+    @Override
+    public void lockUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı." + id));
+
+        if(user.getRole().equals(Role.ROLE_ADMIN)){
+            throw new AdminCannotBeLockedException("Admin hesabı kilitlenemez.");
+        }
+
+        if (user.isAccountNonLocked()) {
+            user.setAccountNonLocked(false);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void unlockUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı." + id));
+
+        if (!user.isAccountNonLocked()) {
+            user.setAccountNonLocked(true);
+            userRepository.save(user);
+        }
+
     }
 
 }

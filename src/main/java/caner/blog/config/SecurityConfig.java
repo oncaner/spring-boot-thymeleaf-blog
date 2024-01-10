@@ -1,6 +1,7 @@
 package caner.blog.config;
 
 import caner.blog.exception.CustomAccessDeniedHandler;
+import caner.blog.exception.CustomAuthenticationFailureHandler;
 import caner.blog.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -21,6 +23,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
+    private static final String[] PUBLIC_MATCHERS = {
+            "/",
+            "/login",
+            "/error",
+            "/registration/**",
+            "/posts"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -41,16 +50,21 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/login", "/error", "/registration/**", "/posts")
-                .permitAll()
+                .requestMatchers(PUBLIC_MATCHERS).permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/", true).permitAll()
+                .failureHandler(authenticationFailureHandler())
                 .and()
                 .logout().invalidateHttpSession(true).clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").permitAll()
