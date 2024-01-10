@@ -7,8 +7,10 @@ import caner.blog.dto.request.UpdatePostRequest;
 import caner.blog.dto.response.CommentDTO;
 import caner.blog.dto.response.PostDTO;
 import caner.blog.model.Post;
+import caner.blog.model.User;
 import caner.blog.service.CommentService;
 import caner.blog.service.PostService;
+import caner.blog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final UserService userService;
     private final ModelMapperService modelMapperService;
     private final CommentService commentService;
 
@@ -77,9 +80,14 @@ public class PostController {
     }
 
     @GetMapping("/update-post/{id}")
-    public String showUpdatePostForm(@PathVariable("id") Long id, Model model) {
+    public String showUpdatePostForm(@PathVariable("id") Long id, Model model, Principal principal) {
 
+        String principalEmail = principal.getName();
         Post post = postService.getPostById(id);
+
+        if (!post.getUser().getEmail().equals(principalEmail)) {
+            return "redirect:/posts";
+        }
 
         model.addAttribute("post", post);
 

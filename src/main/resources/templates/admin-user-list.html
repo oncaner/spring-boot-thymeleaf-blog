@@ -250,18 +250,22 @@
                             </td>
                             <td class="candidate-list-favourite-time text-center">
                                 <a class="candidate-list-favourite order-2 text-danger" href="#"></a>
-                                <span class="candidate-list-time order-1" style="font-weight: bolder;font-style: italic"
+                                <span class="candidate-list-time order-1"
+                                      style="font-weight: bolder;font-style: italic;color: #00d504"
                                       th:if="${user.isEnabled() == true}">Aktif</span>
 
-                                <span class="candidate-list-time order-1" style="font-weight: bolder;font-style: italic"
+                                <span class="candidate-list-time order-1"
+                                      style="font-weight: bolder;font-style: italic;color: #ff2020"
                                       th:unless="${user.isEnabled() == true}">Pasif</span>
                             </td>
                             <td class="candidate-list-favourite-time text-center">
                                 <a class="candidate-list-favourite order-2 text-danger" href="#"></a>
-                                <span class="candidate-list-time order-1" style="font-weight: bolder;font-style: italic"
+                                <span class="candidate-list-time order-1"
+                                      style="font-weight: bolder;font-style: italic;color: #00d504"
                                       th:if="${user.isAccountNonLocked() == true}">Mevcut</span>
 
-                                <span class="candidate-list-time order-1" style="font-weight: bolder;font-style: italic"
+                                <span class="candidate-list-time order-1"
+                                      style="font-weight: bolder;font-style: italic;color: #ff2020"
                                       th:unless="${user.isAccountNonLocked() == true}">Kilitli</span>
                             </td>
                             <td>
