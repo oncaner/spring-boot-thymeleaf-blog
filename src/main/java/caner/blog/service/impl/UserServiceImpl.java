@@ -15,9 +15,11 @@ import caner.blog.repository.UserRepository;
 import caner.blog.service.PasswordResetTokenService;
 import caner.blog.service.UserService;
 import caner.blog.service.VerificationTokenService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -28,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,25 @@ public class UserServiceImpl implements UserService {
         return userList.stream()
                 .map(user -> modelMapperService.forResponse()
                         .map(user, UserDTO.class)).toList();
+    }
+
+    @Override
+    public Page<User> getAllPageableUsers(String page, int size) {
+
+        try{
+            int pageNumber = Integer.parseInt(page);
+
+            if(pageNumber < 1){
+                pageNumber = 1;
+            }
+
+            Pageable pageable = PageRequest.of(pageNumber - 1, size);
+
+            return userRepository.findAll(pageable);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Sayfa numarası 0'dan büyük olmalı veya sayı olmalıdır.");
+        }
+
     }
 
     @Override
@@ -149,7 +169,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı." + id));
 
-        if(user.getRole().equals(Role.ROLE_ADMIN)){
+        if (user.getRole().equals(Role.ROLE_ADMIN)) {
             throw new AdminCannotBeLockedException("Admin hesabı kilitlenemez.");
         }
 

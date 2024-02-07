@@ -22,7 +22,7 @@
 
 <div th:replace="~{fragment :: navbar}"></div>
 
-<div class="container bootstrap snippets bootdey" style="width: 90%">
+<div class="container bootstrap snippets bootdey" style="width: max-content">
     <div th:if="${param.update_success}" class="alert alert-info">
         User has been updated successfully.
     </div>
@@ -32,7 +32,7 @@
     <div class="panel-body inf-content" style="display: flex;margin-top: 3.5rem">
         <div class="row" th:object="${user}" style="display: flex;justify-content: space-between">
             <div class="col-md-4">
-                <img alt="" style="width:600px;" title="" class="img-circle img-thumbnail isTooltip"
+                <img alt="" style="width:500px;" title="" class="img-circle img-thumbnail isTooltip"
                      th:if="${user.imagePath != null}"
                      th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}" data-original-title="Usuario">
 
