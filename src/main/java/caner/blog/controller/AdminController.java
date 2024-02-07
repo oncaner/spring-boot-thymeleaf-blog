@@ -38,12 +38,21 @@ public class AdminController {
         try {
             Page<User> pageableUsers = userService.getAllPageableUsers(page, size);
 
+            int pageNumber = Integer.parseInt(page);
+
+            int totalPages = pageableUsers.getTotalPages();
+
+            if(pageNumber > totalPages){
+                redirectAttributes.addFlashAttribute("pageNumberException", "Sayfa numarası çok fazla!");
+                return "redirect:/admin/user-list";
+            }
+
             List<UserDTO> userList = pageableUsers.getContent().stream()
                     .map(user -> modelMapperService.forResponse().map(user, UserDTO.class)).toList();
 
             model.addAttribute("users", userList);
-            model.addAttribute("currentPage", Integer.parseInt(page));
-            model.addAttribute("totalPages", pageableUsers.getTotalPages());
+            model.addAttribute("currentPage", pageNumber);
+            model.addAttribute("totalPages", totalPages);
             model.addAttribute("totalItems", pageableUsers.getTotalElements());
 
             return "admin-user-list";
