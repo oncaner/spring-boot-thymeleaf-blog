@@ -11,6 +11,69 @@
         body {
             background-color: #e9ebee;
         }
+
+        p {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .blog .image {
+            height: 250px;
+            overflow: hidden;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .blog .image img {
+            width: 100%;
+            height: auto;
+        }
+
+        .blog .date {
+            top: -10px;
+            z-index: 99;
+            width: 65px;
+            right: -10px;
+            height: 65px;
+            padding: 10px;
+            position: absolute;
+            color: #FFFFFF;
+            font-weight: bold;
+            background: #5bc0de;
+            border-radius: 999px;
+        }
+
+        .blog .blog-details {
+            padding: 0 20px 0 0;
+        }
+
+        .blog {
+            padding: 0;
+        }
+
+        .well {
+            border: 0;
+            padding: 20px;
+            min-height: 63px;
+            background: #fff;
+            box-shadow: none;
+            border-radius: 3px;
+            position: relative;
+            max-height: 100000px;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .blog .blog-details h2 {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .blog .date .blog-number {
+            color: #fff;
+            display: block;
+            font-size: 24px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -18,36 +81,36 @@
 
 <div th:replace="~{fragment :: navbar}"></div>
 
-<div class="container">
+<div class="container bootstrap snippets bootdey">
+    <hr>
     <div class="row">
-        <table class="table table-striped table-dark">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Content</th>
-                <th scope="col">User</th>
-                <th scope="col">Created Date</th>
-                <th scope="col">Post Detail</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="post:${posts}">
-                <td th:text="${post.title}"></td>
-                <td th:utext="${post.content}"></td>
-                <td>
-                    <a style="text-decoration: none; color: #00ffad"
-                       th:href="@{'/user/' + ${post.userDTO.id} + '/profile'}">
-                        <span th:text="${post.userDTO.nickname}"></span>
-                    </a>
-                </td>
-                <td th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                <td>
-                    <!--                    <a th:href="@{/update-post/{id}(id=${post.id})}" class="btn btn-primary">Update</a>-->
-                    <a th:href="@{/posts/{id}(id=${post.id})}" class="btn btn-primary">Go To Post</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div th:each="post:${posts}">
+                <div class="well blog">
+                    <div class="date primary" style="width: fit-content; height: fit-content; padding: 5px; border-radius: 5px; background-color: #007bff; color: #ffffff;">
+                        <th:block th:text="${#temporals.format(post.createdDate, 'EEE, dd MMMM YYYY hh:mm:ss')}"></th:block>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                            <div class="image">
+                                <img src="https://blog.aku.edu.tr/wp-content/themes/akulog/images/giris.jpg"
+                                     alt="">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <div class="blog-details">
+                                <a style="text-decoration: none" th:href="@{/posts/{id}(id = ${post.id})}">
+                                    <h2 th:text="${post.title}"></h2>
+                                </a>
+                                <p th:utext="${#strings.length(post.content) > 50 ? #strings.substring(post.content, 0, 400) + '...' : post.content}">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

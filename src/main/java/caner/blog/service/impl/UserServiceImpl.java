@@ -56,10 +56,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> getAllPageableUsers(String page, int size) {
 
-        try{
+        try {
             int pageNumber = Integer.parseInt(page);
 
-            if(pageNumber < 1){
+            if (pageNumber < 1) {
                 pageNumber = 1;
             }
 
