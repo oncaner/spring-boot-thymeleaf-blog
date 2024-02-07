@@ -5,12 +5,15 @@ import caner.blog.dto.request.UpdatePostRequest;
 import caner.blog.dto.response.PostDTO;
 import caner.blog.model.Post;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface PostService {
 
     List<PostDTO> getAllPosts();
+
+    Page<Post> getAllPageablePosts(String page, int size);
 
     List<PostDTO> getAllPostsByUserId(Long id);
 

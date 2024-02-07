@@ -40,6 +40,10 @@ public class AdminController {
 
             int pageNumber = Integer.parseInt(page);
 
+            if(pageNumber < 1){
+                pageNumber = 1;
+            }
+
             int totalPages = pageableUsers.getTotalPages();
 
             if(pageNumber > totalPages){

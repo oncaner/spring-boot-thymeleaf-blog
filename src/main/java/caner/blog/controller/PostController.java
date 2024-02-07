@@ -6,23 +6,20 @@ import caner.blog.dto.request.CreatePostRequest;
 import caner.blog.dto.request.UpdatePostRequest;
 import caner.blog.dto.response.CommentDTO;
 import caner.blog.dto.response.PostDTO;
+import caner.blog.dto.response.UserDTO;
 import caner.blog.model.Post;
 import caner.blog.model.User;
 import caner.blog.service.CommentService;
 import caner.blog.service.PostService;
-import caner.blog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -33,15 +30,45 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final UserService userService;
     private final ModelMapperService modelMapperService;
     private final CommentService commentService;
 
     @GetMapping
-    public String getAllPosts(Model model) {
-        model.addAttribute("posts", postService.getAllPosts());
+    public String getAllPosts(@RequestParam(value = "page", required = false,
+            defaultValue = "1") String page, Model model, RedirectAttributes redirectAttributes) {
 
-        return "posts";
+        int size = 4;
+
+        try {
+            Page<Post> pageableUsers = postService.getAllPageablePosts(page, size);
+
+            int pageNumber = Integer.parseInt(page);
+
+            if(pageNumber < 1){
+                pageNumber = 1;
+            }
+
+            int totalPages = pageableUsers.getTotalPages();
+
+            if(pageNumber > totalPages){
+                redirectAttributes.addFlashAttribute("pageNumberException", "Sayfa numarası çok fazla!");
+                return "redirect:/posts";
+            }
+
+            List<PostDTO> postList = pageableUsers.getContent().stream()
+                    .map(post -> modelMapperService.forResponse().map(post, PostDTO.class)).toList();
+
+            model.addAttribute("posts", postList);
+            model.addAttribute("currentPage", pageNumber);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("totalItems", pageableUsers.getTotalElements());
+
+            return "posts";
+
+        } catch (NumberFormatException e) {
+            redirectAttributes.addFlashAttribute("numberFormatException", e.getMessage());
+            return "redirect:/posts";
+        }
     }
 
     @GetMapping("/{id}")

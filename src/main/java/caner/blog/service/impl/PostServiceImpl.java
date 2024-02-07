@@ -12,6 +12,9 @@ import caner.blog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,24 @@ public class PostServiceImpl implements PostService {
         return posts.stream()
                 .map(post -> modelMapperService.forResponse()
                         .map(post, PostDTO.class)).toList();
+    }
+
+    @Override
+    public Page<Post> getAllPageablePosts(String page, int size) {
+
+        try {
+            int pageNumber = Integer.parseInt(page);
+
+            if (pageNumber < 1) {
+                pageNumber = 1;
+            }
+
+            Pageable pageable = PageRequest.of(pageNumber - 1, size);
+
+            return postRepository.findAll(pageable);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Sayfa numarası 0'dan büyük olmalı veya sayı olmalıdır.");
+        }
     }
 
     @Override
