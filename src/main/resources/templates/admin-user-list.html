@@ -315,6 +315,10 @@
                     <div class="text-center mt-3 mt-sm-3" th:if="${totalPages > 1}">
                         <ul class="pagination justify-content-center mb-0">
                             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                <a class="page-link" th:href="@{/admin/user-list(page=${1})}">First</a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
                                 <a class="page-link" th:href="@{/admin/user-list(page=${currentPage - 1})}">Prev</a>
                             </li>
 
@@ -327,6 +331,10 @@
 
                             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
                                 <a class="page-link" th:href="@{/admin/user-list(page=${currentPage + 1})}">Next</a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+                                <a class="page-link" th:href="@{/admin/user-list(page=${totalPages})}">Last</a>
                             </li>
                         </ul>
                     </div>
