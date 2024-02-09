@@ -41,6 +41,12 @@ public class AdminController {
 
             if (username != null && !username.isEmpty()) {
                 pageableUsers = userService.searchUsersByUsername(username, page, size);
+
+                if(pageableUsers.getContent().isEmpty()){
+                    redirectAttributes.addFlashAttribute("userNotFound", "Kullanıcı bulunamadı!");
+                    return "redirect:/admin/user-list";
+                }
+
             } else {
                 pageableUsers = userService.getAllPageableUsers(page, size);
             }

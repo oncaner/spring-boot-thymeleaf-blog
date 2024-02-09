@@ -226,6 +226,11 @@
                            style="background-color: #fc4444; font-weight: bolder;
                        width: max-content;padding: 0.5rem;border-radius: 5px"></p>
                     </div>
+                    <div th:if="${userNotFound}">
+                        <p th:text="${userNotFound}"
+                           style="background-color: #fc4444; font-weight: bolder;
+                       width: max-content;padding: 0.5rem;border-radius: 5px"></p>
+                    </div>
 
                     <form action="/admin/user-list" method="get" class="mb-3">
                         <div class="form-group">
