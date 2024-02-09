@@ -73,6 +73,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<User> searchUsersByUsername(String username, String page, int size) {
+        try {
+            int pageNumber = Integer.parseInt(page);
+
+            if (pageNumber < 1) {
+                pageNumber = 1;
+            }
+
+            Pageable pageable = PageRequest.of(pageNumber - 1, size);
+
+            return userRepository.findByNicknameContainingIgnoreCase(username, pageable);
+
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Sayfa numarası 0'dan büyük olmalı veya sayı olmalıdır.");
+        }
+    }
+
+    @Override
     public User registerUser(RegistrationRequest request) {
         User user = User.builder()
                 .firstName(request.getFirstName())

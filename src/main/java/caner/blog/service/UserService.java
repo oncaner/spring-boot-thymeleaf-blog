@@ -16,6 +16,8 @@ public interface UserService {
 
     Page<User> getAllPageableUsers(String page, int size);
 
+    Page<User> searchUsersByUsername(String nickname, String page, int size);
+
     User registerUser(RegistrationRequest registrationRequest);
 
     Optional<User> findByEmail(String email);

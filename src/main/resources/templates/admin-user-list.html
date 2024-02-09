@@ -226,6 +226,16 @@
                            style="background-color: #fc4444; font-weight: bolder;
                        width: max-content;padding: 0.5rem;border-radius: 5px"></p>
                     </div>
+
+                    <form action="/admin/user-list" method="get" class="mb-3">
+                        <div class="form-group">
+                            <label>
+                                <input type="text" class="form-control" placeholder="Kullanıcı adı ara" name="username">
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ara</button>
+                    </form>
+
                     <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
 
                         <table class="table manage-candidates-top mb-0">
@@ -241,7 +251,8 @@
                             <tr class="candidates-list" th:each="user:${users}">
                                 <td class="title">
                                     <div class="thumb">
-                                        <img class="img-fluid" th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}"
+                                        <img class="img-fluid"
+                                             th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}"
                                              alt="">
                                     </div>
                                     <div class="candidate-list-details">
@@ -252,7 +263,8 @@
                                             </div>
                                             <div class="candidate-list-option">
                                                 <ul class="list-unstyled">
-                                                    <li><i class="fas fa-user"></i> <span th:text="${user.nickname}"></span>
+                                                    <li><i class="fas fa-user"></i> <span
+                                                            th:text="${user.nickname}"></span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -281,7 +293,8 @@
                                 </td>
                                 <td>
                                     <ul class="list-unstyled mb-0 d-flex justify-content-end">
-                                        <li th:if="${user.role == 'ROLE_ADMIN'}"><a th:href="@{/user}" class="text-primary"
+                                        <li th:if="${user.role == 'ROLE_ADMIN'}"><a th:href="@{/user}"
+                                                                                    class="text-primary"
                                                                                     data-toggle="tooltip" title=""
                                                                                     data-original-title="view"><i
                                                 class="far fa-eye"></i></a></li>
@@ -321,30 +334,35 @@
                         <div class="text-center mt-3 mt-sm-3" th:if="${totalPages > 1}">
                             <ul class="pagination justify-content-center mb-0">
                                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/admin/user-list(page=${1})}">First</a>
+                                    <a class="page-link"
+                                       th:href="@{'/admin/user-list?page=1' + ${#strings.isEmpty(username) ? '' :
+                                       '&username=' + username}}">First</a>
                                 </li>
 
                                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/admin/user-list(page=${currentPage - 1})}">Prev</a>
+                                    <a class="page-link" th:href="@{'/admin/user-list?page=' + ${currentPage - 1} +
+                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">Prev</a>
                                 </li>
 
                                 <th:block th:each="pageNumber : ${#numbers.sequence(1, totalPages)}">
                                     <li class="page-item" th:classappend="${pageNumber == currentPage} ? 'active' : ''">
-                                        <a class="page-link" th:href="@{/admin/user-list(page=${pageNumber})}"
+                                        <a class="page-link" th:href="@{'/admin/user-list?page=' + ${pageNumber} +
+                                        ${#strings.isEmpty(username) ? '' : '&username=' + username}}"
                                            th:text="${pageNumber}"></a>
                                     </li>
                                 </th:block>
 
                                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/admin/user-list(page=${currentPage + 1})}">Next</a>
+                                    <a class="page-link" th:href="@{'/admin/user-list?page=' + ${currentPage + 1} +
+                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">Next</a>
                                 </li>
 
                                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/admin/user-list(page=${totalPages})}">Last</a>
+                                    <a class="page-link" th:href="@{'/admin/user-list?page=' + ${totalPages} +
+                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">Last</a>
                                 </li>
                             </ul>
                         </div>
-
 
                     </div>
                 </div>

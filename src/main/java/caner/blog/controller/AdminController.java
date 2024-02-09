@@ -30,23 +30,30 @@ public class AdminController {
     }
 
     @GetMapping("/user-list")
-    public String getUserList(@RequestParam(value = "page", required = false,
-            defaultValue = "1") String page, Model model, RedirectAttributes redirectAttributes) {
+    public String getUserList(@RequestParam(value = "page", required = false, defaultValue = "1") String page,
+                              @RequestParam(value = "username", required = false) String username,
+                              Model model, RedirectAttributes redirectAttributes) {
 
         int size = 4;
 
         try {
-            Page<User> pageableUsers = userService.getAllPageableUsers(page, size);
+            Page<User> pageableUsers;
+
+            if (username != null && !username.isEmpty()) {
+                pageableUsers = userService.searchUsersByUsername(username, page, size);
+            } else {
+                pageableUsers = userService.getAllPageableUsers(page, size);
+            }
 
             int pageNumber = Integer.parseInt(page);
 
-            if(pageNumber < 1){
+            if (pageNumber < 1) {
                 pageNumber = 1;
             }
 
             int totalPages = pageableUsers.getTotalPages();
 
-            if(pageNumber > totalPages){
+            if (pageNumber > totalPages) {
                 redirectAttributes.addFlashAttribute("pageNumberException", "Sayfa numarası çok fazla!");
                 return "redirect:/admin/user-list";
             }
@@ -58,6 +65,7 @@ public class AdminController {
             model.addAttribute("currentPage", pageNumber);
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("totalItems", pageableUsers.getTotalElements());
+            model.addAttribute("username", username);
 
             return "admin-user-list";
 
@@ -67,6 +75,7 @@ public class AdminController {
         }
 
     }
+
 
     @GetMapping("/user-lock")
     public String lockUser(@RequestParam("userId") Long id, RedirectAttributes redirectAttributes) {
