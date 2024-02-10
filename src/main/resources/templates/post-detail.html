@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -13,12 +12,6 @@
             color: red;
         }
 
-        .row {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-        }
-
         body {
             background-color: #e9ebee;
             margin: 0;
@@ -28,7 +21,6 @@
         }
 
         .be-comment-block {
-            /*margin-bottom: 50px !important;*/
             border: 1px solid #edeff2;
             border-radius: 2px;
             padding: 5px 5px;
@@ -96,7 +88,6 @@
             line-height: 22px;
             background: #e9ebee;
             border: 1px solid #edeff2;
-            /*padding: 5px;*/
             word-wrap: break-word;
             color: #2d2525;
             white-space: pre-wrap;
@@ -114,10 +105,6 @@
             color: #b5b8c2;
             text-align: center;
             line-height: 50px;
-            -webkit-border-top-left-radius: 2px;
-            -webkit-border-bottom-left-radius: 2px;
-            -moz-border-radius-topleft: 2px;
-            -moz-border-radius-bottomleft: 2px;
             border-top-left-radius: 2px;
             border-bottom-left-radius: 2px;
         }
@@ -128,7 +115,6 @@
             font-weight: 400;
             color: #36383f;
             width: 100%;
-            /*height: 25px;*/
             padding-left: 5px;
             padding-right: 5px;
             border: 1px solid #edeff2;
@@ -143,6 +129,14 @@
             height: 150px;
         }
 
+        .article-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .article {
+            width: 85%;
+        }
     </style>
 </head>
 
@@ -151,84 +145,81 @@
 <div th:replace="~{fragment :: navbar}"></div>
 
 <br>
-<div class="row">
-    <div class="col-md-10 offset-md-2" style="display: flex; justify-content: center">
-        <div class="col-lg-8" style="width: 85%">
-            <article>
-                <!-- Post header-->
-                <header class="mb-4">
-                    <!-- Post title-->
-                    <h1 th:text="${post.title}" class="fw-bolder mb-2" style="color: darkblue;
-                    font-weight: bolder;"></h1>
-                    <a style="text-decoration: none; color: #00ffad"
-                       th:href="@{'/user/' + ${post.userDTO.id} + '/profile'}">
-                        <p th:text="${post.userDTO.nickname} + ' tarafından yayınlandı.'" class="lead"
-                           style="font-size: 14px;color:#006c46; display: inline-block;margin-top: 10px"></p>
+<div class="article-container">
+    <div class="article">
+        <article>
+            <!-- Post header-->
+            <header class="mb-4">
+                <!-- Post title-->
+                <h1 th:text="${post.title}" class="fw-bolder mb-2" style="color: darkblue;
+                font-weight: bolder;"></h1>
+                <a style="text-decoration: none; color: #00ffad"
+                   th:href="@{'/user/' + ${post.userDTO.id} + '/profile'}">
+                    <p th:text="${post.userDTO.nickname} + ' tarafından yayınlandı.'" class="lead"
+                       style="font-size: 14px;color:#006c46; display: inline-block;margin-top: 10px"></p>
+                </a>
+                <!-- Post meta <content-->
+                <div th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss') + ' tarihinde yayınlandı.'}"
+                     class="text-muted fst-italic mb-1"></div>
+                <div th:text="${#temporals.format(post.updatedDate, 'yyyy-MM-dd HH:mm:ss') + ' tarihinde düzenlendi.'}"
+                     class="text-muted fst-italic mb-1"></div>
+                <div style="border-bottom: 1px solid #ababab;margin: 1.5rem 0"></div>
+            </header>
+            <!-- Post content-->
+            <section class="mb-5" style="overflow-wrap: break-word;">
+                <div th:utext="${post.content}" style="white-space: pre-wrap;"></div>
+            </section>
+            <hr>
+        </article>
+        <div th:each="comment:${comments}" class="be-comment-block">
+            <div class="be-comment">
+                <div class="be-img-comment">
+                    <a th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
+                        <img th:src="@{/images/{imagePath}(imagePath=${comment.userDTO.imagePath})}" alt=""
+                             class="be-ava-comment">
                     </a>
-                    <!-- Post meta <content-->
-                    <div th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss') + ' tarihinde yayınlandı.'}"
-                         class="text-muted fst-italic mb-1"></div>
-                    <div th:text="${#temporals.format(post.updatedDate, 'yyyy-MM-dd HH:mm:ss') + ' tarihinde düzenlendi.'}"
-                         class="text-muted fst-italic mb-1"></div>
-                    <div style="border-bottom: 1px solid #ababab;margin: 1.5rem 0"></div>
-                </header>
-                <!-- Post content-->
-                <section class="mb-5" style="overflow-wrap: break-word;">
-                    <div th:utext="${post.content}" style="white-space: pre-wrap;"></div>
-                </section>
-                <hr>
-            </article>
-            <div th:each="comment:${comments}" class="be-comment-block">
-                <!--                <h1 class="comments-title">Comments (3)</h1>-->
-                <div class="be-comment">
-                    <div class="be-img-comment">
-                        <a th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
-                            <img th:src="@{/images/{imagePath}(imagePath=${comment.userDTO.imagePath})}" alt=""
-                                 class="be-ava-comment">
-                        </a>
-                    </div>
-                    <div class="be-comment-content">
+                </div>
+                <div class="be-comment-content">
 
-				<span class="be-comment-name" th:if="${post.userDTO.email == comment.userDTO.email}">
+                    <span class="be-comment-name" th:if="${post.userDTO.email == comment.userDTO.email}">
                         <a style="text-decoration: none; color: #00159d;
                         font-weight: bold; font-size: 1rem"
                            th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
-                        <span style="font-size: 14px"
-                              th:text="${comment.userDTO.nickname + ' (Gönderi Sahibi)'}"></span>
-                    </a>
+                            <span style="font-size: 14px"
+                                  th:text="${comment.userDTO.nickname + ' (Gönderi Sahibi)'}"></span>
+                        </a>
                     </span>
-                        <span th:unless="${post.userDTO.email == comment.userDTO.email}">
-                    <a style="text-decoration: none; color: #00159d;
-                        font-weight: bold; font-size: 1rem"
-                       th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
-                        <span style="font-size: 14px" th:text="${comment.userDTO.nickname}"></span>
-                    </a>
+                    <span th:unless="${post.userDTO.email == comment.userDTO.email}">
+                        <a style="text-decoration: none; color: #00159d;
+                            font-weight: bold; font-size: 1rem"
+                           th:href="@{'/user/' + ${comment.userDTO.id} + '/profile'}">
+                            <span style="font-size: 14px" th:text="${comment.userDTO.nickname}"></span>
+                        </a>
                     </span>
-                        <span th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"
-                              class="be-comment-time">
+                    <span th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"
+                          class="be-comment-time">
 					<i class="fa fa-clock-o"></i></span>
 
-                        <div th:text="${comment.comment}" class="be-comment-text"></div>
-                    </div>
+                    <div th:text="${comment.comment}" class="be-comment-text"></div>
                 </div>
             </div>
-            <form th:action="@{'/posts/'+${post.id}+'/create-comment'}" method="POST" th:object="${newComment}"
-                  class="form-block">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                                <textarea th:field="*{comment}" id="comment" name="comment" class="form-input"
-                                          style="resize: none;width: 100%;height: max-content" required
-                                          placeholder="Yorum yap..."></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary pull-right">Yorum ekle</button>
-                        <div th:if="${commentSizeError}" style="margin-top: 5px" th:text="${commentSizeError}"
-                             class="alert alert-danger"></div>
-                        <div th:unless="${commentSizeError}" class="alert alert-danger" style="display: none"></div>
-                    </div>
-                </div>
-            </form>
         </div>
+        <form th:action="@{'/posts/'+${post.id}+'/create-comment'}" method="POST" th:object="${newComment}"
+              class="form-block">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <textarea th:field="*{comment}" id="comment" name="comment" class="form-input"
+                                  style="resize: none;width: 100%;height: max-content" required
+                                  placeholder="Yorum yap..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary pull-right">Yorum ekle</button>
+                    <div th:if="${commentSizeError}" style="margin-top: 5px" th:text="${commentSizeError}"
+                         class="alert alert-danger"></div>
+                    <div th:unless="${commentSizeError}" class="alert alert-danger" style="display: none"></div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 

@@ -15,7 +15,7 @@
 
         form {
             margin: auto;
-            width: 50%;
+            width: 85%; /* changed width to 85% */
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -55,8 +55,11 @@
             color: red;
         }
 
-        #content {
-            width: max-content;
+        /* Adjustments for smaller screens */
+        @media screen and (max-width: 768px) {
+            form {
+                width: 100%; /* changed width to 100% for smaller screens */
+            }
         }
     </style>
 </head>

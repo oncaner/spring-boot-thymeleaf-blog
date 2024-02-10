@@ -96,7 +96,8 @@
                     <div class="date primary"
                          style="width: fit-content; height: fit-content; padding: 5px; border-radius: 5px; background-color: #007bff; color: #ffffff;">
                         <th:block
-                                th:text="${#temporals.format(post.createdDate, 'EEE, dd MMMM YYYY hh:mm:ss')}"></th:block>
+                                th:text="${#temporals.format(post.createdDate.atZone(T(java.time.ZoneId).of('Europe/Istanbul')), 'EEE, dd MMMM YYYY HH:mm:ss')}">
+                        </th:block>
                     </div>
 
                     <div class="row">

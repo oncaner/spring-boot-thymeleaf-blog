@@ -1,7 +1,6 @@
 package caner.blog.controller;
 
 import caner.blog.common.mapper.ModelMapperService;
-import caner.blog.dto.request.UpdateUserInformationRequest;
 import caner.blog.dto.response.PostDTO;
 import caner.blog.dto.response.UserDTO;
 import caner.blog.exception.FirstAndLastNameException;
@@ -10,11 +9,9 @@ import caner.blog.exception.NicknameSizeException;
 import caner.blog.model.User;
 import caner.blog.service.PostService;
 import caner.blog.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -95,8 +92,7 @@ public class UserController {
         } catch (FirstAndLastNameException exception) {
             redirectAttributes.addFlashAttribute("firstAndLastNameException", exception.getMessage());
             return "redirect:/user/edit";
-        }
-        catch (NicknameSizeException exception) {
+        } catch (NicknameSizeException exception) {
             redirectAttributes.addFlashAttribute("nicknameSizeException", exception.getMessage());
             return "redirect:/user/edit";
         }
