@@ -29,6 +29,9 @@ public class Post {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "short_information")
+    private String shortInformation;
+
     @Column(name = "content")
     @Lob
     private String content;

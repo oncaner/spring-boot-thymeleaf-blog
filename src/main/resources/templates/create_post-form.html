@@ -9,6 +9,10 @@
     <title>Create Post</title>
     <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
     <style>
+        body {
+            background-color: #e9ebee;
+        }
+
         form {
             margin: auto;
             width: 50%;
@@ -51,14 +55,9 @@
             color: red;
         }
 
-        body {
-            background-color: #e9ebee;
-        }
-
-        #content{
+        #content {
             width: max-content;
         }
-
     </style>
 </head>
 
@@ -67,13 +66,16 @@
 <div th:replace="~{fragment :: navbar}"></div>
 
 <br><br><br>
-<form th:action="@{/posts/create-post}" method="POST" th:object="${post}"
-      style="width: 85%">
+<form th:action="@{/posts/create-post}" method="POST" th:object="${post}" style="width: 85%">
     <div class="form-group">
         <label for="title">Title:</label>
         <input th:field="*{title}" type="text" id="title" name="title" required/>
-        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
-             th:errorclass="error"></div>
+        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="error"></div>
+    </div>
+    <div class="form-group">
+        <label for="shortInformation">Short information about your post:</label>
+        <input th:field="*{shortInformation}" type="text" id="shortInformation" name="shortInformation" required/>
+        <div th:if="${#fields.hasErrors('shortInformation')}" th:errors="*{shortInformation}" th:errorclass="error"></div>
     </div>
     <div class="form-group">
         <label for="content">Content:</label>

@@ -68,15 +68,17 @@
             border-bottom: 1px solid #eee;
         }
 
+        .blog-details h2, .blog-details p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         .blog .date .blog-number {
             color: #fff;
             display: block;
             font-size: 24px;
             text-align: center;
-        }
-
-        .pagination-bold a {
-            font-weight: bold;
         }
     </style>
 </head>
@@ -109,48 +111,54 @@
                                 <a style="text-decoration: none" th:href="@{/posts/{id}(id = ${post.id})}">
                                     <h2 th:text="${post.title}"></h2>
                                 </a>
-                                <p th:utext="${#strings.length(post.content) > 50 ? #strings.substring(post.content, 0, 400) + '...' : post.content}">
+                                <p th:utext="${#strings.length(post.shortInformation) > 50 ?
+                                       (post.content.length() > 400 ?
+                                           #strings.substring(post.shortInformation, 0, 400) + '...' :
+                                           post.shortInformation) :
+                                       post.shortInformation}">
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="text-center mt-3 mt-sm-3" th:if="${totalPages > 1}">
-                <ul class="pagination justify-content-center mb-0">
-                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                        <a class="page-link pagination-bold" th:if="${currentPage != 1}" th:href="@{/posts(page=${1})}">First</a>
-                        <a class="page-link pagination-bold disabled" th:unless="${currentPage != 1}">First</a>
-                    </li>
-
-                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                        <a class="page-link pagination-bold" th:if="${currentPage != 1}" th:href="@{/posts(page=${currentPage - 1})}">Prev</a>
-                        <a class="page-link pagination-bold disabled" th:unless="${currentPage != 1}">Prev</a>
-                    </li>
-
-                    <th:block th:each="pageNumber : ${#numbers.sequence(1, totalPages)}">
-                        <li class="page-item" th:classappend="${pageNumber == currentPage} ? 'active' : ''">
-                            <a class="page-link pagination-bold" th:href="@{/posts(page=${pageNumber})}" th:text="${pageNumber}"></a>
-                        </li>
-                    </th:block>
-
-                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-                        <a class="page-link pagination-bold" th:if="${currentPage != totalPages}" th:href="@{/posts(page=${currentPage + 1})}">Next</a>
-                        <a class="page-link pagination-bold disabled" th:unless="${currentPage != totalPages}">Next</a>
-                    </li>
-
-                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-                        <a class="page-link pagination-bold" th:if="${currentPage != totalPages}" th:href="@{/posts(page=${totalPages})}">Last</a>
-                        <a class="page-link pagination-bold disabled" th:unless="${currentPage != totalPages}">Last</a>
-                    </li>
-                </ul>
-            </div>
-
         </div>
     </div>
 </div>
 
+<div class="text-center mt-3 mt-sm-3" th:if="${totalPages > 1}">
+    <ul class="pagination justify-content-center mb-0">
+        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+            <a class="page-link" th:if="${currentPage != 1}" th:href="@{/posts(page=${1})}">First</a>
+            <a class="page-link disabled" th:unless="${currentPage != 1}">First</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+            <a class="page-link" th:if="${currentPage != 1}"
+               th:href="@{/posts(page=${currentPage - 1})}">Prev</a>
+            <a class="page-link disabled" th:unless="${currentPage != 1}">Prev</a>
+        </li>
+
+        <th:block th:each="pageNumber : ${#numbers.sequence(1, totalPages)}">
+            <li class="page-item" th:classappend="${pageNumber == currentPage} ? 'active' : ''">
+                <a class="page-link" th:href="@{/posts(page=${pageNumber})}"
+                   th:text="${pageNumber}"></a>
+            </li>
+        </th:block>
+
+        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+            <a class="page-link" th:if="${currentPage != totalPages}"
+               th:href="@{/posts(page=${currentPage + 1})}">Next</a>
+            <a class="page-link disabled" th:unless="${currentPage != totalPages}">Next</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+            <a class="page-link" th:if="${currentPage != totalPages}"
+               th:href="@{/posts(page=${totalPages})}">Last</a>
+            <a class="page-link disabled" th:unless="${currentPage != totalPages}">Last</a>
+        </li>
+    </ul>
+</div>
 </body>
 
 </html>

@@ -83,6 +83,7 @@ public class PostServiceImpl implements PostService {
 
         Post post = Post.builder()
                 .title(createPostRequest.getTitle())
+                .shortInformation(createPostRequest.getShortInformation())
                 .content(createPostRequest.getContent())
                 .user(user.get())
                 .build();

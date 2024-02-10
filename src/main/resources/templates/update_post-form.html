@@ -72,6 +72,12 @@
              th:errorclass="error"></div>
     </div>
     <div class="form-group">
+        <label for="title">Short information about your post:</label>
+        <input th:field="*{shortInformation}" type="text" id="shortInformation" name="shortInformation" required/>
+        <div th:if="${#fields.hasErrors('shortInformation')}" th:errors="*{shortInformation}"
+             th:errorclass="error"></div>
+    </div>
+    <div class="form-group">
         <label for="content">Content:</label>
         <textarea th:field="*{content}" id="content" name="content" required></textarea>
         <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" th:errorclass="error"></div>
