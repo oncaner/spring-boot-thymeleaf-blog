@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService {
                 .email(userRegistrationHelper.checkEmail(request.getEmail()))
                 .imagePath("default-user-image.png")
                 .password(passwordEncoder.encode(request.getPassword()))
+                .isAccountNonLocked(true)
                 .role(Role.ROLE_USER)
                 .build();
 
