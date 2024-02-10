@@ -23,5 +23,5 @@ public interface PostService {
 
     void deletePostById(Long id);
 
-    void updatePost(UpdatePostRequest updatePostRequest, HttpServletRequest request);
+    Post updatePost(UpdatePostRequest updatePostRequest, HttpServletRequest request);
 }

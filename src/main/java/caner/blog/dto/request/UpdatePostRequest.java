@@ -2,6 +2,7 @@ package caner.blog.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,13 @@ public class UpdatePostRequest {
 
     @NotNull(message = "Bu alanı doldurunuz!")
     @NotBlank(message = "Boş geçilemez!")
+    @Size(min = 5, max = 30, message = "Başlık 5-30 karakter arasında olmalıdır!")
     private String title;
+
+    @NotNull(message = "Bu alanı doldurunuz!")
+    @NotBlank(message = "Boş geçilemez!")
+    @Size(min = 5, max = 50, message = "Kısa bilgi 5-50 karakter arasında olmalıdır!")
+    private String shortInformation;
 
     @NotNull(message = "Bu alanı doldurunuz!")
     @NotBlank(message = "Boş geçilemez!")

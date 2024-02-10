@@ -98,15 +98,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void updatePost(UpdatePostRequest updatePostRequest, HttpServletRequest request) {
+    public Post updatePost(UpdatePostRequest updatePostRequest, HttpServletRequest request) {
 
         String postId = request.getParameter("postId");
         Long id = Long.parseLong(postId);
 
         Post post = getPostById(id);
         post.setTitle(updatePostRequest.getTitle());
+        post.setShortInformation(updatePostRequest.getShortInformation());
         post.setContent(updatePostRequest.getContent());
 
-        postRepository.save(post);
+        return postRepository.save(post);
     }
 }
