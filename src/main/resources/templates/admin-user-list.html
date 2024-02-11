@@ -290,12 +290,15 @@
                                     <a class="candidate-list-favourite order-2 text-danger" href="#"></a>
                                     <span class="candidate-list-time order-1"
                                           style="font-weight: bolder;font-style: italic;color: #00d504"
+                                          th:id="'unlockedUser_' + ${user.id}"
                                           th:if="${user.isAccountNonLocked() == true}">Mevcut</span>
 
                                     <span class="candidate-list-time order-1"
                                           style="font-weight: bolder;font-style: italic;color: #ff2020"
+                                          th:id="'lockedUser_' + ${user.id}"
                                           th:unless="${user.isAccountNonLocked() == true}">Kilitli</span>
                                 </td>
+
                                 <td>
                                     <ul class="list-unstyled mb-0 d-flex justify-content-end">
                                         <li th:if="${user.role == 'ROLE_ADMIN'}"><a th:href="@{/user}"
@@ -305,29 +308,34 @@
                                                 class="far fa-eye"></i></a></li>
                                         <li th:unless="${user.role == 'ROLE_ADMIN'}"><a
                                                 th:href="@{'/user/' + ${user.id} + '/profile'}" class="text-primary"
-                                                data-toggle="tooltip" title=""
+                                                data-toggle="tooltip" title="Profile git"
                                                 data-original-title="view"><i class="far fa-eye"></i></a></li>
                                         <!--                                    <li><a href="#" class="text-info" data-toggle="tooltip" title=""-->
                                         <!--                                           data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a></li>-->
 
                                         <li th:if="${!(user.role == 'ROLE_ADMIN')}">
                                             <a th:if="${user.isAccountNonLocked() == true}"
-                                               th:href="@{/admin/user-lock(userId=${user.id})}"
+                                               th:onclick="'lockUser(' + ${user.id} + ')'"
                                                class="text-danger"
+                                               style="cursor: pointer"
                                                data-toggle="tooltip"
-                                               title=""
+                                               title="Kilitle"
                                                data-original-title="Delete">
-                                                <i class="fas fa-lock text-danger"></i></a>
+                                                <i th:id="'lockUser_' + ${user.id}" class="fas fa-lock text-danger"></i>
+                                            </a>
                                         </li>
 
                                         <li th:if="${!(user.role == 'ROLE_ADMIN')}">
                                             <a th:if="${user.isAccountNonLocked() == false}"
-                                               th:href="@{/admin/user-unlock(userId=${user.id})}"
+                                               th:onclick="'unlockUser(' + ${user.id} + ')'"
                                                class="text-danger"
+                                               style="cursor: pointer"
                                                data-toggle="tooltip"
-                                               title=""
+                                               title="Kilidi kaldır"
                                                data-original-title="Delete">
-                                                <i class="fas fa-lock-open text-success"></i></a>
+                                                <i th:id="'unlockUser_' + ${user.id}"
+                                                   class="fas fa-lock-open text-success"></i>
+                                            </a>
                                         </li>
 
                                     </ul>
@@ -376,5 +384,46 @@
 
     </div>
 </div>
+
+<script>
+    function lockUser(userId) {
+        fetch(`/admin/lock-user?userId=${userId}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Locking user failed');
+                }
+
+                document.getElementById(`lockUser_${userId}`).className = 'fas fa-lock-open text-success';
+                document.getElementById(`unlockedUser_${userId}`).textContent = 'Kilitli';
+                document.getElementById(`unlockedUser_${userId}`).style.color = '#ff2020';
+            })
+            .catch(error => {
+                console.error('Locking user error:', error);
+            });
+    }
+
+    function unlockUser(userId) {
+        fetch(`/admin/unlock-user?userId=${userId}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unlocking user failed');
+                }
+
+                document.getElementById(`unlockUser_${userId}`).className = 'fas fa-lock text-danger';
+                document.getElementById(`lockedUser_${userId}`).textContent = 'Mevcut';
+                document.getElementById(`lockedUser_${userId}`).style.color = '#00d504';
+            })
+            .catch(error => {
+                console.error('Unlocking user error:', error);
+            });
+    }
+
+
+</script>
+
 </body>
 </html>

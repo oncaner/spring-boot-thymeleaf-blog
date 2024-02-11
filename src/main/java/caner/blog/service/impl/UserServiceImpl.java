@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
                 pageNumber = 1;
             }
 
-            Pageable pageable = PageRequest.of(pageNumber - 1, size);
+            Pageable pageable = PageRequest.of(pageNumber - 1, size, Sort.Direction.ASC, "id");
 
             return userRepository.findAll(pageable);
         } catch (NumberFormatException e) {
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
                 pageNumber = 1;
             }
 
-            Pageable pageable = PageRequest.of(pageNumber - 1, size);
+            Pageable pageable = PageRequest.of(pageNumber - 1, size, Sort.Direction.ASC, "id");
 
             return userRepository.findByNicknameContainingIgnoreCase(username, pageable);
 
