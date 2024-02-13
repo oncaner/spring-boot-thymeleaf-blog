@@ -59,6 +59,31 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional // Large Object Hatası alınmaması için transactional kullanıldı.
+    public List<PostDTO> searchPostsByTitle(String title, String page) {
+
+        try {
+            int pageNumber = Integer.parseInt(page);
+
+            if (pageNumber < 1) {
+                pageNumber = 1;
+            }
+
+            int size = 4;
+
+            Pageable pageable = PageRequest.of(pageNumber - 1, size);
+            Page<Post> pageablePosts = postRepository.findAllByTitleContainingIgnoreCase(title, pageable);
+
+            return pageablePosts.getContent().stream()
+                    .map(post -> modelMapperService.forResponse()
+                            .map(post, PostDTO.class)).toList();
+
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Sayfa numarası 0'dan büyük olmalı veya sayı olmalıdır.");
+        }
+    }
+
+    @Override
     @Transactional
     public List<PostDTO> getAllPostsByUserId(Long id) {
         List<Post> postList = postRepository.findAllByUserId(id);

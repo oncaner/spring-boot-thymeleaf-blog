@@ -15,6 +15,8 @@ public interface PostService {
 
     Page<Post> getAllPageablePosts(String page, int size);
 
+    List<PostDTO> searchPostsByTitle(String title, String page);
+
     List<PostDTO> getAllPostsByUserId(Long id);
 
     Post getPostById(Long id);
