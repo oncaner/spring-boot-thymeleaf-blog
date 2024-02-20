@@ -2,11 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Profile</title>
-    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <title>Profil düzenle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style th:replace="~{fragment::navbar-style}"></style>
     <style>
         body {
-            background-color: #e9ebee;
+            background-color: #e0e0de;
         }
 
         .error {
@@ -14,16 +17,20 @@
         }
 
         .inf-content {
-            border: 1px solid #DDDDDD;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
+            border: 1px solid #b2b2b0;
             border-radius: 10px;
-            box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            background-color: #e0e0de;
+            padding: 20px;
         }
 
         .user-update-inputs {
             border: none;
-            background-color: #E9EBEE;
+            background-color: #e0e0de;
+        }
+
+        .image-upload-button {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -31,144 +38,137 @@
 
 <div th:replace="~{fragment :: navbar}"></div>
 
-<div class="container bootstrap snippets bootdey" style="width: max-content">
-    <div class="panel-body inf-content" style="display: flex;margin-top: 3.5rem">
-        <div class="row" th:object="${user}" style="display: flex;justify-content: space-between">
-            <div class="col-md-4">
-                <img alt="" style="width:600px;" title="" class="img-circle img-thumbnail isTooltip"
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="text-center">
+                <img alt="" style="width:100%; max-width: 400px;background-color: #e0e0de" title=""
+                     class="img-circle img-thumbnail isTooltip mb-4"
                      th:if="${user.imagePath != null}"
-                     th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}" data-original-title="Usuario">
+                     th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}"
+                     data-original-title="Usuario">
 
                 <div class="image-upload-button">
                     <div th:if="${user.email == principalEmail}">
-                        <form th:action="@{'/user/upload-user-image'}" method="post" enctype="multipart/form-data">
-                            <br>
+                        <form th:action="@{'/user/upload-user-image'}" method="post" enctype="multipart/form-data"
+                              style="margin-bottom: 1rem">
                             <div class="mb-3">
+                                <label for="image" class="form-label">Resim seç:</label>
                                 <input class="form-control" type="file" accept=".jpg,.jpeg,.png"
-                                       id="image" name="image"
-                                       style="background-color: #E9EBEE;color: #003180">
+                                       id="image" name="image">
                             </div>
-                            <br>
-                            <button type="submit" class="btn btn-primary">Upload</button>
+
+                            <button type="submit" class="btn btn-primary">Resim yükle</button>
                         </form>
-                        <br>
-                        <div th:if="${emptyFile}" th:text="${emptyFile}" class="alert alert-danger"></div>
+
+                        <div th:if="${emptyFile}" th:text="${emptyFile}" class="alert alert-danger mt-3"></div>
                         <div th:if="${unknownImageError}" th:text="${unknownImageError}"
-                             class="alert alert-danger"></div>
+                             class="alert alert-danger mt-3"></div>
                         <div th:if="${imageExtensionErrorMessage}" th:text="${imageExtensionErrorMessage}"
-                             class="alert alert-danger"></div>
+                             class="alert alert-danger mt-3"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6" style="margin-top: 2.5rem">
+        </div>
+        <div class="col-md-8">
+            <div class="inf-content">
                 <form method="post" th:action="@{/user/update-profile}" th:object="${user}">
                     <div class="table-responsive">
-                        <table class="table table-user-information">
+                        <table class="table table-borderless">
                             <tbody>
                             <tr>
                                 <td>
                                     <strong>
-                                        <span class="glyphicon glyphicon-user  text-primary"></span>
-                                        First Name
+                                        <span class="bi bi-person text-primary"></span>
+                                        Ad:
                                     </strong>
                                 </td>
-                                <!--                            <td class="text-primary" th:text="${user.firstName}">-->
-                                <!--                            </td>-->
                                 <td>
                                     <input type="text" th:value="${user.firstName}" id="firstName" name="firstName"
                                            th:field="*{firstName}" required
-                                           class="text-primary user-update-inputs">
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>
-                                        <span class="glyphicon glyphicon-cloud text-primary"></span>
-                                        Last Name
-                                    </strong>
-                                </td>
-                                <!--                            <td class="text-primary" th:text="${user.lastName}">-->
-                                <td>
-                                    <input type="text" th:value="${user.lastName}"
-                                           th:field="*{lastName}" required
-                                           class="text-primary user-update-inputs">
-                                </td>
-
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <strong>
-                                        <span class="glyphicon glyphicon-bookmark text-primary"></span>
-                                        Username
-                                    </strong>
-                                </td>
-                                <!--                            <td class="text-primary" th:text="${user.nickname}">-->
-                                <td>
-                                    <input type="text" th:field="*{nickname}"
-                                           class="text-primary user-update-inputs" required
-                                           th:value="${user.nickname}"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <strong>
-                                        <span class="glyphicon glyphicon-eye-open text-primary"></span>
-                                        Role
-                                    </strong>
-                                </td>
-                                <td class="text-primary" th:if="${user.role == 'ROLE_ADMIN'}">ADMIN</td>
-                                <td class="text-primary" th:unless="${user.role == 'ROLE_ADMIN'}">USER</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>
-                                        <span class="glyphicon glyphicon-envelope text-primary"></span>
-                                        Email
-                                    </strong>
-                                </td>
-                                <td class="text-primary" th:text="${user.email}">
+                                           class="form-control user-update-inputs">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <strong>
-                                        <span class="glyphicon glyphicon-calendar text-primary"></span>
-                                        Created
+                                        <span class="bi bi-person text-primary"></span>
+                                        Soyad:
                                     </strong>
                                 </td>
-                                <td class="text-primary"
-                                    th:text="${#temporals.format(user.createdDate, 'yyyy-MM-dd HH:mm:ss')}">
+                                <td>
+                                    <input type="text" th:value="${user.lastName}" th:field="*{lastName}" required
+                                           class="form-control user-update-inputs">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <strong>
-                                        <span class="glyphicon glyphicon-calendar text-primary"></span>
-                                        Modified
+                                        <span class="bi bi-person text-primary"></span>
+                                        Kullanıcı adı:
                                     </strong>
                                 </td>
-                                <td class="text-primary"
-                                    th:text="${#temporals.format(user.updatedDate, 'yyyy-MM-dd HH:mm:ss')}">
+                                <td>
+                                    <input type="text" th:field="*{nickname}" class="form-control user-update-inputs"
+                                           required th:value="${user.nickname}"/>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="bi bi-eye text-primary"></span>
+                                        Rol:
+                                    </strong>
+                                </td>
+                                <td th:if="${user.role == 'ROLE_ADMIN'}">ADMIN</td>
+                                <td th:unless="${user.role == 'ROLE_ADMIN'}">USER</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="bi bi-envelope text-primary"></span>
+                                        Email:
+                                    </strong>
+                                </td>
+                                <td th:text="${user.email}"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="bi bi-calendar text-primary"></span>
+                                        Oluşturulma tarihi:
+                                    </strong>
+                                </td>
+                                <td th:text="${#temporals.format(user.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="bi bi-calendar text-primary"></span>
+                                        Güncelleme tarihi:
+                                    </strong>
+                                </td>
+                                <td th:text="${#temporals.format(user.updatedDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
                 </form>
-                <br>
-                <p th:if="${firstAndLastNameException}" th:text="${firstAndLastNameException}"
-                   class="btn btn-danger" style="cursor:auto"></p>
-                <br>
-                <p th:if="${nicknameSizeException}" th:text="${nicknameSizeException}"
-                   class="btn btn-danger" style="cursor:auto"></p>
+
+                <div class="text-center mt-3">
+                    <i class="bi bi-info-circle-fill text-info"></i>
+                    <span class="ms-2" style="color: #6c757d;">Ad, Soyad ve Kullanıcı adınızı güncellemek için üzerine tıklayınız</span>
+                </div>
+
+                <div th:if="${firstAndLastNameException}" th:text="${firstAndLastNameException}"
+                     class="alert alert-danger mt-3"></div>
+                <div th:if="${nicknameSizeException}" th:text="${nicknameSizeException}"
+                     class="alert alert-danger mt-3"></div>
             </div>
         </div>
     </div>
 </div>
-
+<script th:replace="~{fragment :: navbar-script}"></script>
 </body>
 </html>

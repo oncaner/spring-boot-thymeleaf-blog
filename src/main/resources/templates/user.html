@@ -1,133 +1,149 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Users</title>
-    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style th:replace="~{fragment::navbar-style}"></style>
     <style>
         body {
-            background-color: #e9ebee;
+            background-color: #e0e0de;
+            margin: 0;
+            padding: 0;
         }
 
-        .inf-content {
-            border: 1px solid #DDDDDD;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #e0e0de;
             border-radius: 10px;
-            box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            text-align: left;
+        }
+
+        .profile-info table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        .profile-info th,
+        .profile-info td {
+            padding: 10px;
+            border-bottom: 1px solid #b2b2b0;
+        }
+
+        .profile-info th {
+            width: 30%;
+            font-weight: bold;
+            background-color: #e0e0de;
+            vertical-align: top;
+        }
+
+        .profile-info td {
+            width: 70%;
+            vertical-align: top;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-button {
+            margin: 0 10px;
+        }
+
+        @media (max-width: 576px) {
+            .profile-info th,
+            .profile-info td {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
         }
     </style>
 </head>
+
 <body>
 
 <div th:replace="~{fragment :: navbar}"></div>
+<div class="container">
+    <div class="profile-header">
+        <img alt="Profile Picture" class="img-circle img-thumbnail isTooltip profile-image"
+             style="background-color: #e0e0de"
+             th:if="${user.imagePath != null}"
+             th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}" data-original-title="Usuario">
+        <h2>Profil</h2>
+    </div>
 
-<div class="container bootstrap snippets bootdey" style="width: max-content">
+    <div class="profile-info">
+        <table>
+            <tbody>
+            <tr>
+                <th><span class="bi bi-person text-primary"></span> Ad:</th>
+                <td th:text="${user.firstName}"></td>
+            </tr>
+            <tr>
+                <th><span class="bi bi-person text-primary"></span> Soyad:</th>
+                <td th:text="${user.lastName}"></td>
+            </tr>
+            <tr>
+                <th><span class="bi bi-person text-primary"></span> Kullanıcı adı:</th>
+                <td th:text="${user.nickname}"></td>
+            </tr>
+            <tr>
+                <th><span class="bi bi-eye text-primary"></span> Rol:</th>
+                <td th:if="${user.role == 'ROLE_ADMIN'}">ADMIN</td>
+                <td th:unless="${user.role == 'ROLE_ADMIN'}">USER</td>
+            </tr>
+            <tr>
+                <th><span class="bi bi-envelope text-primary"></span> Email:</th>
+                <td th:text="${user.email}"></td>
+            </tr>
+            <tr>
+                <th><span class="bi bi-calendar text-primary"></span> Oluşturulma tarihi:</th>
+                <td th:text="${#temporals.format(user.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            <tr>
+                <th><span class="bi bi-calendar text-primary"></span> Güncelleme tarihi:</th>
+                <td th:text="${#temporals.format(user.updatedDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="btn-container">
+        <a class="btn btn-primary profile-button" th:href="@{/user/edit}">Profili düzenle</a>
+        <a class="btn btn-info profile-button" th:href="@{'/user/'+${user.id}+'/profile'}">Gönderiler</a>
+    </div>
+    <br>
     <div th:if="${param.update_success}" class="alert alert-info">
-        User has been updated successfully.
-    </div>
-    <div th:if="${param.delete_success}" class="alert alert-info">
-        User has been deleted successfully.
-    </div>
-    <div class="panel-body inf-content" style="display: flex;margin-top: 3.5rem">
-        <div class="row" th:object="${user}" style="display: flex;justify-content: space-between">
-            <div class="col-md-4">
-                <img alt="" style="width:500px;" title="" class="img-circle img-thumbnail isTooltip"
-                     th:if="${user.imagePath != null}"
-                     th:src="@{/images/{imagePath}(imagePath=${user.imagePath})}" data-original-title="Usuario">
-
-                <div class="edit-profile-go-to-post-buttons">
-                    <br><br><br>
-                    <a class="btn btn-primary" th:href="@{/user/edit}">Edit Profile</a>
-                    <a class="btn btn-info" th:href="@{'/user/'+${user.id}+'/profile'}"
-                       style="align-self: flex-end">My Posts</a>
-                </div>
-            </div>
-            <div class="col-md-6" style="margin-top: 2.5rem">
-                <div class="table-responsive">
-                    <table class="table table-user-information">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <strong>
-                                    <span class="glyphicon glyphicon-user  text-primary"></span>
-                                    First Name
-                                </strong>
-                            </td>
-                            <td class="text-primary" th:text="${user.firstName}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>
-                                    <span class="glyphicon glyphicon-cloud text-primary"></span>
-                                    Last Name
-                                </strong>
-                            </td>
-                            <td class="text-primary" th:text="${user.lastName}">
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <strong>
-                                    <span class="glyphicon glyphicon-bookmark text-primary"></span>
-                                    Username
-                                </strong>
-                            </td>
-                            <td class="text-primary" th:text="${user.nickname}">
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <strong>
-                                    <span class="glyphicon glyphicon-eye-open text-primary"></span>
-                                    Role
-                                </strong>
-                            </td>
-                            <td class="text-primary" th:if="${user.role == 'ROLE_ADMIN'}">ADMIN</td>
-                            <td class="text-primary" th:unless="${user.role == 'ROLE_ADMIN'}">USER</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>
-                                    <span class="glyphicon glyphicon-envelope text-primary"></span>
-                                    Email
-                                </strong>
-                            </td>
-                            <td class="text-primary" th:text="${user.email}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>
-                                    <span class="glyphicon glyphicon-calendar text-primary"></span>
-                                    Created
-                                </strong>
-                            </td>
-                            <td class="text-primary"
-                                th:text="${#temporals.format(user.createdDate, 'yyyy-MM-dd HH:mm:ss')}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>
-                                    <span class="glyphicon glyphicon-calendar text-primary"></span>
-                                    Modified
-                                </strong>
-                            </td>
-                            <td class="text-primary"
-                                th:text="${#temporals.format(user.updatedDate, 'yyyy-MM-dd HH:mm:ss')}">
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        Profil başarıyla güncellendi.
     </div>
 </div>
 
+<script th:replace="~{fragment :: navbar-script}"></script>
 </body>
+
 </html>

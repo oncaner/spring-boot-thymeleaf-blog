@@ -4,22 +4,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Fragment</title>
+    <style th:fragment="navbar-style">
+        .navbar-custom {
+            background-color: #343a40; /* Dark grey */
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff; /* White */
+            font-size: 1.15rem;
+        }
+
+        .navbar-custom .navbar-brand:hover,
+        .navbar-custom .nav-link:hover {
+            color: #adb5bd; /* Light grey */
+        }
+
+        .navbar-custom .navbar-toggler {
+            border-color: #ffffff; /* White */
+        }
+
+        .navbar-custom .navbar-toggler-icon {
+            background-color: #ffffff; /* White */
+        }
+
+        .navbar-custom .navbar-nav .nav-item {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 992px) {
+            .navbar-custom .navbar-nav {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <div th:fragment="navbar">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" th:href="@{/}">Home</a>
-        <!--        <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/users}">Users</a>-->
-        <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/user}">Profile</a>
-        <a class="navbar-brand" th:href="@{/posts}">Posts</a>
-        <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/posts/create-post}">Publish a Post</a>
-        <a class="navbar-brand" th:href="@{/registration/registration-form}">Register</a>
-        <a class="navbar-brand" sec:authorize="!isAuthenticated()" href="#" th:href="@{/login}">Login</a>
-        <a class="navbar-brand" style="color: red" th:href="@{/admin}" sec:authorize="hasRole('ROLE_ADMIN')" href="#">Admin</a>
-        <a class="navbar-brand" sec:authorize="isAuthenticated()" href="#" th:href="@{/logout}">Logout</a>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">Anasayfa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" sec:authorize="isAuthenticated()" th:href="@{/user}">Profilim</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/posts}">Gönderiler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" sec:authorize="isAuthenticated()" th:href="@{/posts/create-post}">Gönderi
+                            Oluştur</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/registration/registration-form}">Kayıt</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" sec:authorize="!isAuthenticated()" th:href="@{/login}">Giriş</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" style="color: red" th:href="@{/admin}"
+                           sec:authorize="hasRole('ROLE_ADMIN')">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" sec:authorize="isAuthenticated()" th:href="@{/logout}">Çıkış</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
 </div>
+
+<script th:fragment="navbar-script"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

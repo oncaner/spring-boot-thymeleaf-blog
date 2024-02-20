@@ -2,14 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin User List</title>
+    <title>Kullanıcılar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
           integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous"/>
-    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         body {
-            background-color: #f8f9fa !important;
+            background-color: #e0e0de !important;
         }
 
         a {
@@ -20,7 +21,8 @@
             padding: 1.5rem !important;
         }
 
-        .mb-0, .my-0 {
+        .mb-0,
+        .my-0 {
             margin-bottom: 0 !important;
         }
 
@@ -82,21 +84,15 @@
 
         /* Candidate List */
         .candidate-list {
-            background: #ffffff;
-            display: -webkit-box;
-            display: -ms-flexbox;
+            background: #e0e0de;
             display: flex;
             border-bottom: 1px solid #eeeeee;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
             align-items: center;
             padding: 20px;
-            -webkit-transition: all 0.3s ease-in-out;
             transition: all 0.3s ease-in-out;
         }
 
         .candidate-list:hover {
-            -webkit-box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);
             box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);
             position: relative;
             z-index: 99;
@@ -104,14 +100,11 @@
 
         .candidate-list:hover a.candidate-list-favourite {
             color: #e74c3c;
-            -webkit-box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);
             box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);
         }
 
         .candidate-list .candidate-list-image {
             margin-right: 25px;
-            -webkit-box-flex: 0;
-            -ms-flex: 0 0 80px;
             flex: 0 0 80px;
             border: none;
         }
@@ -128,10 +121,7 @@
         }
 
         .candidate-list-details ul {
-            display: -webkit-box;
-            display: -ms-flexbox;
             display: flex;
-            -ms-flex-wrap: wrap;
             flex-wrap: wrap;
             margin-bottom: 0px;
         }
@@ -145,8 +135,6 @@
             margin-left: auto;
             text-align: center;
             font-size: 13px;
-            -webkit-box-flex: 0;
-            -ms-flex: 0 0 90px;
             flex: 0 0 90px;
         }
 
@@ -164,7 +152,6 @@
             border: 1px solid #eeeeee;
             border-radius: 100%;
             text-align: center;
-            -webkit-transition: all 0.3s ease-in-out;
             transition: all 0.3s ease-in-out;
             margin-bottom: 20px;
             font-size: 16px;
@@ -172,26 +159,26 @@
         }
 
         .candidate-list .candidate-list-favourite-time .candidate-list-favourite:hover {
-            background: #ffffff;
+            background: #e0e0de;
             color: #e74c3c;
         }
 
         .candidate-banner .candidate-list:hover {
             position: inherit;
-            -webkit-box-shadow: inherit;
             box-shadow: inherit;
             z-index: inherit;
         }
 
         .bg-white {
-            background-color: #ffffff !important;
+            background-color: #e0e0de !important;
         }
 
         .p-4 {
             padding: 1.5rem !important;
         }
 
-        .mb-0, .my-0 {
+        .mb-0,
+        .my-0 {
             margin-bottom: 0 !important;
         }
 
@@ -246,10 +233,10 @@
                         <table class="table manage-candidates-top mb-0">
                             <thead>
                             <tr>
-                                <th>Users</th>
-                                <th class="text-center">Email Status</th>
-                                <th class="text-center">Account Status</th>
-                                <th class="action text-right">Action</th>
+                                <th>Kullanıcılar</th>
+                                <th class="text-center">Email Durumu</th>
+                                <th class="text-center">Hesap Durumu</th>
+                                <th class="action text-right">İşlemler</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -308,6 +295,7 @@
                                                 class="far fa-eye"></i></a></li>
                                         <li th:unless="${user.role == 'ROLE_ADMIN'}"><a
                                                 th:href="@{'/user/' + ${user.id} + '/profile'}" class="text-primary"
+                                                target="_blank"
                                                 data-toggle="tooltip" title="Profile git"
                                                 data-original-title="view"><i class="far fa-eye"></i></a></li>
                                         <!--                                    <li><a href="#" class="text-info" data-toggle="tooltip" title=""-->
@@ -349,12 +337,12 @@
                                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
                                     <a class="page-link"
                                        th:href="@{'/admin/user-list?page=1' + ${#strings.isEmpty(username) ? '' :
-                                       '&username=' + username}}">First</a>
+                                       '&username=' + username}}">İlk</a>
                                 </li>
 
                                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
                                     <a class="page-link" th:href="@{'/admin/user-list?page=' + ${currentPage - 1} +
-                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">Prev</a>
+                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">Geri</a>
                                 </li>
 
                                 <th:block th:each="pageNumber : ${#numbers.sequence(1, totalPages)}">
@@ -367,12 +355,12 @@
 
                                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
                                     <a class="page-link" th:href="@{'/admin/user-list?page=' + ${currentPage + 1} +
-                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">Next</a>
+                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">İleri</a>
                                 </li>
 
                                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
                                     <a class="page-link" th:href="@{'/admin/user-list?page=' + ${totalPages} +
-                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">Last</a>
+                                    ${#strings.isEmpty(username) ? '' : '&username=' + username}}">Son</a>
                                 </li>
                             </ul>
                         </div>

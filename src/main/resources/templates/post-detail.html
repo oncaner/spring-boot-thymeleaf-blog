@@ -6,8 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
-    <title>Post Detail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/codemirror@5.68.0/theme/monokai.css" rel="stylesheet">
+    <title>Gönderi detay</title>
     <style>
+
+        .hljs {
+            background-color: #E9EBEE;
+            color: #000000;
+        }
+
         .error {
             color: red;
         }
@@ -135,16 +143,12 @@
         }
 
         .article {
-            width: 85%;
+            width: 75%;
         }
     </style>
 </head>
 
 <body>
-
-<div th:replace="~{fragment :: navbar}"></div>
-
-<br>
 <div class="article-container">
     <div class="article">
         <article>
@@ -222,7 +226,8 @@
         </form>
     </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
 </body>
 
 </html>

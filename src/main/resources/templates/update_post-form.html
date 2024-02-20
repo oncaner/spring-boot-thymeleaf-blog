@@ -5,21 +5,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
-    <title>Update Post</title>
-    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/codemirror@5.68.0/theme/monokai.css"
+          rel="stylesheet">
+    <title>Gönderi güncelle</title>
+    <script src="https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <style th:replace="~{fragment :: navbar-style}"></style>
     <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
         form {
             margin: auto;
-            width: 50%;
-            padding: 20px;
-            border: 1px solid #ccc;
+            width: 85%;
+            padding: 10px;
+            border: 1px solid #ced4da;
             border-radius: 5px;
+            background-color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #343a40;
         }
 
         label {
-            display: inline-block;
-            margin-bottom: 5px;
             font-weight: bold;
         }
 
@@ -27,34 +49,39 @@
         textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
             border-radius: 5px;
-            margin-bottom: 15px;
+            box-sizing: border-box;
         }
 
         button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #007bff;
+            color: #fff;
             padding: 12px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 15px;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
         }
 
         button[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
 
         .error {
             color: red;
         }
 
-        body {
-            background-color: #e9ebee;
+        /* Adjustments for smaller screens */
+        @media screen and (max-width: 768px) {
+            form {
+                width: 90%;
+            }
         }
-
     </style>
 </head>
 
@@ -62,31 +89,34 @@
 
 <div th:replace="~{fragment :: navbar}"></div>
 
-<br><br><br>
-<form th:action="@{/posts/update-post}" method="POST" th:object="${post}"
-      style="width: 85%">
+<br>
+<form th:action="@{/posts/update-post}" method="POST" th:object="${post}">
     <div class="form-group">
-        <label for="title">Title:</label>
-        <input th:field="*{title}" type="text" id="title" name="title" required/>
+        <input th:field="*{title}" placeholder="Başlık" type="text" id="title" name="title" required/>
         <div style="color: red" th:if="${titleError}" th:text="${titleError}"></div>
     </div>
     <div class="form-group">
-        <label for="shortInformation">Short information about your post:</label>
-        <input th:field="*{shortInformation}" type="text" id="shortInformation" name="shortInformation" required/>
+        <input th:field="*{shortInformation}" placeholder="Kısa bilgi" type="text" id="shortInformation" name="shortInformation" required/>
         <div style="color: red" th:if="${shortInformationError}" th:text="${shortInformationError}"></div>
     </div>
     <div class="form-group">
-        <label for="content">Content:</label>
         <textarea th:field="*{content}" id="content" name="content" required></textarea>
         <div style="color: red" th:if="${contentError}" th:text="${contentError}"></div>
     </div>
     <input type="hidden" th:value="${post.getId()}" name="postId">
-    <button type="submit">Submit</button>
+    <button type="submit">Güncelle</button>
 </form>
 
 <script>
-    CKEDITOR.replace('content');
+    CKEDITOR.replace('content', {
+        extraPlugins: 'codesnippet',
+        codeSnippet_theme: 'monokai_sublime'
+    });
 </script>
+
+<script th:replace="~{fragment :: navbar-script}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
 </body>
 
 </html>
