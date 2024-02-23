@@ -65,6 +65,7 @@ public class UserController {
         model.addAttribute("user", userDTO);
         model.addAttribute("principalEmail", principalEmail);
         model.addAttribute("posts", postDTOList);
+        model.addAttribute("postUserId", id);
 
         return "user-profile";
     }

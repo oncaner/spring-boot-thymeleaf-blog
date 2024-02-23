@@ -2,46 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>User Profile</title>
+    <title>Profil Detay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style th:replace="~{fragment :: navbar-style}"></style>
-    <style>
-        body {
-            background-color: #e0e0de;
-        }
-
-        #post-process th {
-            text-align: center;
-            font-weight: bolder;
-            color: #14538f;
-            background-color: #e0e0de;
-        }
-
-        #post-process:hover {
-            background-color: #b2b2b0;
-        }
-
-        #post-process-data {
-            text-align: center;
-            font-weight: bolder;
-            background-color: #e0e0de;
-        }
-
-        #post-process-data:hover {
-            background-color: #eee4e4;
-        }
-
-        .table-user-information tbody tr:hover {
-            background-color: #eee4e4;
-        }
-
-        /* Yeni stiller */
-        .img-thumbnail {
-            max-width: 100%; /* Resmi küçültmek için */
-        }
-    </style>
+    <link rel="stylesheet" href="/css/user-profile.css">
 </head>
 <body>
 
@@ -51,6 +17,7 @@
 
         <div class="panel-body inf-content" style="margin-top: 3.5rem">
             <div class="row" th:object="${user}" style="border-bottom: 1px solid #ffffff;">
+                <input type="hidden" style="display: none" id="postUserId" th:value="${postUserId}">
                 <div class="col-xs-12 col-sm-4">
                     <img alt="" style="background-color: #e0e0de" title=""
                          class="img-circle img-thumbnail isTooltip"
@@ -149,25 +116,17 @@
                             <th scope="col">İşlemler</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr id="post-process-data" th:each="post:${posts}">
-                            <td th:text="${post.id}"></td>
-                            <td th:text="${post.title}"></td>
-                            <td>
-                                <a th:if="${principalEmail == post.userDTO.email}"
-                                   th:href="@{/posts/update-post/{id}(id=${post.id})}"
-                                   target="_blank" class="btn btn-primary">Güncelle</a>
-                                <a th:href="@{/posts/{id}(id=${post.id})}" target="_blank" class="btn btn-primary">Göster</a>
-                            </td>
-                        </tr>
+                        <tbody id="postDatas">
                         </tbody>
                     </table>
                 </div>
+                <button style="width: 50px; height: 50px;border-radius: 100%" id="buttonRest">+</button>
             </div>
         </div>
-
     </div>
 </div>
+
+<script src="/javascript/user-profile-posts.js"></script>
 
 <script th:replace="~{fragment :: navbar-script}"></script>
 </body>

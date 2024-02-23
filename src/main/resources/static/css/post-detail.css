@@ -1,0 +1,134 @@
+.hljs {
+    background-color: #E9EBEE;
+    color: #000000;
+}
+
+.error {
+    color: red;
+}
+
+body {
+    background-color: #e9ebee;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.be-comment-block {
+    border: 1px solid #edeff2;
+    border-radius: 2px;
+    padding: 5px 5px;
+    border: 1px solid #ffffff;
+    width: 100%;
+}
+
+.comments-title {
+    font-size: 16px;
+    color: #262626;
+    margin-bottom: 15px;
+    font-family: 'Conv_helveticaneuecyr-bold';
+}
+
+.be-img-comment {
+    width: 60px;
+    height: 60px;
+    float: left;
+    margin-bottom: 15px;
+}
+
+.be-ava-comment {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.be-comment-content {
+    margin-left: 80px;
+}
+
+.be-comment-content span {
+    display: inline-block;
+    width: 49%;
+    margin-bottom: 15px;
+}
+
+.be-comment-name {
+    font-size: 13px;
+    font-family: 'Conv_helveticaneuecyr-bold';
+}
+
+.be-comment-content a {
+    color: #383b43;
+}
+
+.be-comment-content span {
+    display: inline-block;
+    width: 49%;
+    margin-bottom: 15px;
+}
+
+.be-comment-time {
+    text-align: right;
+}
+
+.be-comment-time {
+    font-size: 11px;
+    color: #b4b7c1;
+}
+
+.be-comment-text {
+    font-size: 14px;
+    font-family: Bahnschrift;
+    line-height: 22px;
+    background: #e9ebee;
+    border: 1px solid #edeff2;
+    word-wrap: break-word;
+    color: #2d2525;
+    white-space: pre-wrap;
+    width: 100%;
+    min-height: 30px;
+}
+
+.form-group.fl_icon .icon {
+    position: absolute;
+    top: 1px;
+    left: 16px;
+    width: 48px;
+    height: 48px;
+    background: #f6f6f7;
+    color: #b5b8c2;
+    text-align: center;
+    line-height: 50px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.form-group .form-input {
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 400;
+    color: #36383f;
+    width: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid #edeff2;
+    border-radius: 3px;
+}
+
+.form-group.fl_icon .form-input {
+    padding-left: 70px;
+}
+
+.form-group textarea.form-input {
+    height: 150px;
+}
+
+.article-container {
+    display: flex;
+    justify-content: center;
+}
+
+.article {
+    width: 75%;
+}

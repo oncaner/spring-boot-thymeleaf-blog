@@ -3,6 +3,7 @@ package caner.blog.service.impl;
 import caner.blog.common.mapper.ModelMapperService;
 import caner.blog.dto.request.CreatePostRequest;
 import caner.blog.dto.request.UpdatePostRequest;
+import caner.blog.dto.response.PageablePostDTO;
 import caner.blog.dto.response.PostDTO;
 import caner.blog.model.Post;
 import caner.blog.model.User;
@@ -19,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,6 +93,35 @@ public class PostServiceImpl implements PostService {
         return postList.stream()
                 .map(post -> modelMapperService.forResponse()
                         .map(post, PostDTO.class)).toList();
+    }
+
+    @Override
+    @Transactional
+    public List<PageablePostDTO> getAllPostsByUserIdPageable(Long id, String page, Principal principal) {
+
+        try {
+            int pageNumber = Integer.parseInt(page);
+
+            if (pageNumber < 1) {
+                pageNumber = 1;
+            }
+
+            int size = 4;
+
+            String principalEmail = principal.getName();
+
+            Pageable pageable = PageRequest.of(pageNumber - 1, size);
+            Page<Post> pageablePosts = postRepository.findAllByUserId(id, pageable);
+
+            List<PageablePostDTO> postDTOS = pageablePosts.getContent().stream()
+                    .map(post -> modelMapperService.forResponse()
+                            .map(post, PageablePostDTO.class)).toList();
+
+            return postDTOS.stream().peek(post -> post.setPrincipalEmail(principalEmail)).toList();
+
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Sayfa numarası 0'dan büyük olmalı veya sayı olmalıdır.");
+        }
     }
 
     @Override

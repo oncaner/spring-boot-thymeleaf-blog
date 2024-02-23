@@ -1,0 +1,24 @@
+body {
+    background-color: #e0e0de;
+}
+
+.error {
+    color: red;
+}
+
+.inf-content {
+    border: 1px solid #b2b2b0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #e0e0de;
+    padding: 20px;
+}
+
+.user-update-inputs {
+    border: none;
+    background-color: #e0e0de;
+}
+
+.image-upload-button {
+    margin-top: 20px;
+}

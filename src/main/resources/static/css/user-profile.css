@@ -1,0 +1,33 @@
+body {
+    background-color: #e0e0de;
+}
+
+#post-process th {
+    text-align: center;
+    font-weight: bolder;
+    color: #14538f;
+    background-color: #e0e0de;
+}
+
+#post-process:hover {
+    background-color: #b2b2b0;
+}
+
+#post-process-data {
+    text-align: center;
+    font-weight: bolder;
+    background-color: #e0e0de;
+}
+
+#post-process-data:hover {
+    background-color: #eee4e4;
+}
+
+.table-user-information tbody tr:hover {
+    background-color: #eee4e4;
+}
+
+/* Yeni stiller */
+.img-thumbnail {
+    max-width: 100%; /* Resmi küçültmek için */
+}

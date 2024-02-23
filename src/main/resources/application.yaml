@@ -7,4 +7,4 @@ spring:
     cache-period: 0
   web:
     resources:
-      static-locations: file:./src/main/resources/static/
+      static-locations: classpath:/static/,classpath:/public/,classpath:/resources/,classpath:/META-INF/resources/,file:./src/main/resources/static/

@@ -28,7 +28,10 @@ public class SecurityConfig {
             "/login",
             "/error",
             "/registration/**",
-            "/posts"
+            "/posts",
+            "/images/**",
+            "/css/**",
+            "/js/**",
     };
 
     @Bean
