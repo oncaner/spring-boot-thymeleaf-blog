@@ -42,4 +42,6 @@ Projenin geliştirilmesinde kullanılan teknolojiler:
 - **Arama Fonksiyonu:** Kullanıcılar, blog yazısı başlıklarına göre arama yapabilirler.
 
 
-![Blog Video-v2](https://github.com/oncaner/spring-boot-thymeleaf-blog/assets/86167203/28fd4f29-d226-48ab-9db5-2be173f64668)
+
+https://github.com/oncaner/spring-boot-thymeleaf-blog/assets/86167203/8a77a974-dbca-44f0-a3e3-08ad25a63d98
+
