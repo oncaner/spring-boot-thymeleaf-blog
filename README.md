@@ -40,3 +40,6 @@ Projenin geliştirilmesinde kullanılan teknolojiler:
 - **Pagination:** Çok sayıda verinin tek seferde yüklenmesi engellenmiş, sayfalar arasında geçiş kolaylaştırılmıştır.
 - **Dinamik İçerik:** Birçok sayfada JavaScript ve AJAX istekleri kullanılarak daha dinamik bir kullanıcı deneyimi sağlanmıştır.
 - **Arama Fonksiyonu:** Kullanıcılar, blog yazısı başlıklarına göre arama yapabilirler.
+
+
+![Blog Video-v2](https://github.com/oncaner/spring-boot-thymeleaf-blog/assets/86167203/28fd4f29-d226-48ab-9db5-2be173f64668)
